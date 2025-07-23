@@ -1,4 +1,4 @@
-import { AsyncPaginate } from "react-select-async-paginate";
+import { AsyncPaginate } from 'react-select-async-paginate';
 
 const AsyncMultiSelectTagDropdown = ({
   defaultValue = [],
@@ -13,7 +13,7 @@ const AsyncMultiSelectTagDropdown = ({
       defaultOptions
       isMulti
       loadOptions={loadOptions}
-      className="relative z-20"
+      className='relative z-20'
       onChange={onChange}
       additional={{
         page: 1,

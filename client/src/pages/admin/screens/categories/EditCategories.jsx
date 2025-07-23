@@ -1,24 +1,24 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { toast } from "react-hot-toast";
-import { useParams, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {
   getSingleCategory,
   updateCategory,
-} from "../../../../services/index/postCategories";
+} from '../../../../services/index/postCategories';
 
 const EditCategories = () => {
   const queryClient = useQueryClient();
-  const [categoryTitle, setCategoryTitle] = useState("");
+  const [categoryTitle, setCategoryTitle] = useState('');
   const navigate = useNavigate();
   const { slug } = useParams();
-  const userState = useSelector((state) => state.user);
+  const userState = useSelector(state => state.user);
 
   const { isLoading, isError } = useQuery({
     queryFn: () => getSingleCategory({ slug }),
-    queryKey: ["categories", slug],
-    onSuccess: (data) => {
+    queryKey: ['categories', slug],
+    onSuccess: data => {
       setCategoryTitle(data?.title);
     },
     refetchOnWindowFocus: false,
@@ -33,16 +33,16 @@ const EditCategories = () => {
           token,
         });
       },
-      onSuccess: (data) => {
-        queryClient.invalidateQueries(["categories", slug]);
-        toast.success("Category is updated");
+      onSuccess: data => {
+        queryClient.invalidateQueries(['categories', slug]);
+        toast.success('Category is updated');
         navigate(`/admin/categories/manage/edit/${data._id}`, {
           replace: true,
         });
       },
-      onError: (error) => {
+      onError: error => {
         toast.error(error.message);
-        console.log(error);
+        console.error(error);
       },
     });
 
@@ -56,20 +56,20 @@ const EditCategories = () => {
   };
 
   return (
-    <div className="col-span-4 py-8">
-      <h4 className="text-lg leading-tight">Update Category</h4>
-      <div className="d-form-control w-full mt-6">
+    <div className='col-span-4 py-8'>
+      <h4 className='text-lg leading-tight'>Update Category</h4>
+      <div className='d-form-control mt-6 w-full'>
         <input
           value={categoryTitle}
-          className="d-input d-input-bordered border-slate-300 !outline-slate-300 text-xl font-medium font-roboto text-dark-hard"
-          onChange={(e) => setCategoryTitle(e.target.value)}
-          placeholder="category title"
+          className='d-input d-input-bordered border-slate-300 font-roboto text-xl font-medium text-dark-hard !outline-slate-300'
+          onChange={e => setCategoryTitle(e.target.value)}
+          placeholder='category title'
         />
         <button
           disabled={isLoadingUpdateCategory || isLoading || isError}
-          type="button"
+          type='button'
           onClick={handleUpdateCategory}
-          className="w-fit mt-3 bg-green-500 text-white font-semibold rounded-lg px-4 py-2 disabled:cursor-not-allowed disabled:opacity-70"
+          className='mt-3 w-fit rounded-lg bg-green-500 px-4 py-2 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70'
         >
           Update Category
         </button>

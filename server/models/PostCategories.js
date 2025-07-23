@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose';
 
 const PostCategoriesSchema = new Schema(
   {
@@ -7,5 +7,5 @@ const PostCategoriesSchema = new Schema(
   { timestamps: true }
 );
 
-const PostCategories = model("PostCategories", PostCategoriesSchema);
+const PostCategories = model('PostCategories', PostCategoriesSchema);
 export default PostCategories;

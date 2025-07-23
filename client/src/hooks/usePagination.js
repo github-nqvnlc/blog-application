@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
-export const DOTS = "...";
+export const DOTS = '...';
 
 export const usePagination = ({
   siblingCount = 1,
@@ -33,16 +33,16 @@ export const usePagination = ({
 
     // State 2: No left dots to show, but right dots to be shown
     if (!shoudShowLeftDots && shouldShowRightDots) {
-      let leftItemCount = 3 + 2 * siblingCount;
-      let leftrange = range(1, leftItemCount);
+      const leftItemCount = 3 + 2 * siblingCount;
+      const leftrange = range(1, leftItemCount);
 
       return [...leftrange, DOTS, totalPageCount];
     }
 
     // State 3: No right dots to show, but left dots to be shown
     if (shoudShowLeftDots && !shouldShowRightDots) {
-      let rightItemCount = 3 + 2 * siblingCount;
-      let rightRange = range(
+      const rightItemCount = 3 + 2 * siblingCount;
+      const rightRange = range(
         totalPageCount - rightItemCount + 1,
         totalPageCount
       );
@@ -52,7 +52,7 @@ export const usePagination = ({
 
     // State 4: Both left and right dots to be shown
     if (shoudShowLeftDots && shouldShowRightDots) {
-      let middleRange = range(leftSiblingIndex, rightSiblingIndex);
+      const middleRange = range(leftSiblingIndex, rightSiblingIndex);
       return [firstPageIndex, DOTS, middleRange, DOTS, lastPageIndex];
     }
   }, [siblingCount, currentPage, totalPageCount]);

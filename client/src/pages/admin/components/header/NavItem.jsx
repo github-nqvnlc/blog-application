@@ -1,5 +1,5 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const NavItem = ({
   link,
@@ -14,8 +14,8 @@ const NavItem = ({
       to={link}
       className={`${
         name === activeNavName
-          ? "font-bold text-primary"
-          : "font-semibold text-[#A5A5A5]"
+          ? 'font-bold text-primary'
+          : 'font-semibold text-[#A5A5A5]'
       } flex items-center gap-x-2 py-2 text-lg`}
       onClick={() => setActiveNavName(name)}
     >

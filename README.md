@@ -43,6 +43,13 @@ A full-stack blog application built with modern technologies, featuring a React 
 - **⚡ Optimized Performance** - Query optimization and caching
 - **🔄 Real-time Updates** - Live notifications and updates
 
+### 🚀 **Development & Code Quality**
+- **🔍 GitHub Actions** - Automated CI/CD with code quality checks
+- **✨ ESLint + Prettier** - Consistent code formatting and linting
+- **🎨 Tailwind Sorting** - Automatic CSS class ordering
+- **🛠️ Script Management** - Cross-platform development scripts
+- **📋 Auto-fixing** - Automatic code quality improvements
+
 ### 🎨 **User Experience**
 - **Modern UI/UX** - Clean, intuitive interface design
 - **🌙 Theme Support** - Dark/Light mode capabilities
@@ -63,6 +70,10 @@ A full-stack blog application built with modern technologies, featuring a React 
 | **TipTap** | 2.0.3 | Rich Text Editor |
 | **React Router** | 6.8.1 | Client-side Routing |
 | **Axios** | 1.3.4 | HTTP Client |
+| **ESLint** | Latest | Code Linting |
+| **Prettier** | 3.6.2 | Code Formatting |
+| **prettier-plugin-tailwindcss** | 0.5.14 | Tailwind Class Sorting |
+| **highlight.js** | Latest | Syntax Highlighting |
 
 ### **Backend (Server)**
 | Technology | Version | Purpose |
@@ -75,6 +86,15 @@ A full-stack blog application built with modern technologies, featuring a React 
 | **bcryptjs** | 2.4.3 | Password Hashing |
 | **Multer** | 1.4.5 | File Upload |
 | **Nodemon** | 3.0.0 | Development Tool |
+| **ESLint** | 9.x | Code Linting (ES Modules) |
+| **Prettier** | 3.6.2 | Code Formatting |
+
+### **DevOps & Automation**
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **GitHub Actions** | v4 | CI/CD Automation |
+| **Cross-platform Scripts** | Custom | Development Workflows |
+| **Auto-formatting** | Custom | Code Quality Maintenance |
 
 ## 🚀 Quick Start
 
@@ -236,54 +256,155 @@ blog-application/
 
 ### Root Level Commands
 ```bash
-# Install dependencies for both client and server
-npm run install:all
+# 📦 Installation & Setup
+npm run install:all          # Install dependencies for both client and server
+npm run install:client       # Install client dependencies only
+npm run install:server       # Install server dependencies only
 
-# Start both development servers
-npm run dev
+# 🚀 Development Servers
+npm run dev                  # Start both development servers
+npm run dev:client           # Start client development server only
+npm run dev:server           # Start server development server only
 
-# Build both applications for production
-npm run build
+# 🏗️ Production Build
+npm run build                # Build both applications for production
+npm run build:client         # Build client for production
+npm run start                # Start both production servers
+npm run start:client         # Start client production server
+npm run start:server         # Start server production server
 
-# Run tests for both applications
-npm run test
+# 🧪 Testing
+npm run test                 # Run tests for both applications
+npm run test:client          # Run client tests
+npm run test:server          # Run server tests
 
-# Clean all node_modules and reinstall
-npm run clean:install
+# 🔍 Code Quality & Linting
+npm run lint                 # Check ESLint for both client and server
+npm run lint:fix             # Auto-fix ESLint issues for both
+npm run lint:client          # Check ESLint for client only
+npm run lint:client:fix      # Auto-fix ESLint issues for client
+npm run lint:server          # Check ESLint for server only
+npm run lint:server:fix      # Auto-fix ESLint issues for server
+
+# 🎨 Code Formatting
+npm run format               # Format code with Prettier (both)
+npm run format:check         # Check code formatting (both)
+npm run format:client        # Format client code with Prettier
+npm run format:client:check  # Check client code formatting
+npm run format:server        # Format server code with Prettier
+npm run format:server:check  # Check server code formatting
+
+# 🧹 Cleanup & Maintenance
+npm run clean                # Clean build files and dependencies
+npm run clean:install        # Clean and reinstall all dependencies
 ```
 
 ### Client Commands
 ```bash
 cd client
 
-# Development
-npm start              # Start development server
-npm run build          # Build for production
-npm test               # Run tests
-npm run lint           # Run ESLint
-npm run format         # Format with Prettier
+# 🚀 Development
+npm start                    # Start development server (port 3000)
+npm run build                # Build for production
+npm test                     # Run tests with Jest
+npm run eject                # Eject from Create React App
 
-# Dependencies
-npm run analyze        # Bundle analyzer
-npm run update         # Update dependencies
+# 🔍 Code Quality
+npm run lint                 # Run ESLint check
+npm run lint:fix             # Auto-fix ESLint issues
+npm run format               # Format with Prettier + Tailwind sorting
+npm run format:check         # Check formatting without changes
+npm run format:lint          # Format + lint fix in one command
+
+# 📊 Analysis & Dependencies
+npm run analyze              # Bundle analyzer (if configured)
+npm run update               # Update dependencies
 ```
 
 ### Server Commands
 ```bash
 cd server
 
-# Development
-npm run dev            # Start with nodemon
-npm start              # Start production server
-npm test               # Run tests
-npm run lint           # Run ESLint
+# 🚀 Development
+npm run dev                  # Start with nodemon (port 3001)
+npm start                    # Start production server
+npm test                     # Run tests with Jest
+npm run test:watch           # Run tests in watch mode
 
-# Database
-npm run seed           # Seed database (if available)
-npm run migrate        # Run migrations (if available)
+# 🔍 Code Quality
+npm run lint                 # Run ESLint check
+npm run lint:fix             # Auto-fix ESLint issues
+npm run format               # Format with Prettier
+npm run format:check         # Check formatting without changes
+npm run format:lint          # Format + lint fix in one command
 
-# Utilities
-npm run clean:uploads  # Clean upload directory
+# 🗄️ Database Operations
+npm run seed                 # Seed database (if available)
+npm run migrate              # Run migrations (if available)
+npm run db:reset             # Reset database (if available)
+
+# 🧹 Utilities
+npm run clean:uploads        # Clean upload directory
+npm run logs                 # View application logs
+```
+
+### 🤖 GitHub Actions Workflows
+
+Our repository includes automated workflows that run on every commit and pull request:
+
+#### 🔍 Code Quality Check (`code-quality.yml`)
+- **Triggers**: Push and Pull Request to `main` or `develop`
+- **Runs on**: Ubuntu with Node.js 18.x and 20.x
+- **Steps**:
+  - Install dependencies for both client and server
+  - Run ESLint checks for both applications
+  - Run Prettier format checks
+  - Build client application
+  - Auto-fix and commit changes (main branch only)
+
+#### 🚀 Pull Request Check (`pr-check.yml`)
+- **Triggers**: Pull Request to `main` or `develop`
+- **Purpose**: Quick quality check before merge
+- **Steps**:
+  - ESLint validation
+  - Prettier format validation
+  - Build test
+  - Success confirmation
+
+#### 🎨 Auto Format Code (`auto-format.yml`)
+- **Triggers**: Push to `main` (code files only)
+- **Purpose**: Automatically fix and format code
+- **Steps**:
+  - Auto-fix ESLint issues
+  - Format code with Prettier
+  - Sort Tailwind classes automatically
+  - Commit and push changes if needed
+
+### 📋 Local Development Workflow
+
+```bash
+# 1. Setup project
+git clone <repository-url>
+cd blog-application
+npm run install:all
+
+# 2. Start development
+npm run dev
+
+# 3. Before committing - run quality checks
+npm run lint:fix          # Fix linting issues
+npm run format            # Format all code
+npm run test              # Run tests
+
+# 4. Commit changes
+git add .
+git commit -m "feat: add new feature"
+git push
+
+# 5. GitHub Actions will automatically:
+# - Run quality checks
+# - Auto-format if needed
+# - Build and test the application
 ```
 
 ## 🌐 API Endpoints
@@ -438,6 +559,56 @@ volumes:
 docker-compose up -d
 ```
 
+## 🤖 GitHub Actions & Code Quality
+
+This project includes a comprehensive CI/CD pipeline and automated code quality management:
+
+### 🔄 Continuous Integration Workflows
+
+#### 📋 Automated Quality Checks
+- **ESLint Analysis**: Ensures code follows best practices and catches potential bugs
+- **Prettier Formatting**: Maintains consistent code style across the entire codebase
+- **Tailwind CSS Sorting**: Automatically organizes Tailwind classes for better readability
+- **Build Testing**: Validates that both client and server applications build successfully
+- **Cross-platform Testing**: Tests on Node.js 18.x and 20.x environments
+
+#### 🔧 Auto-fixing & Maintenance
+- **Smart Auto-fixes**: Automatically resolves fixable ESLint issues
+- **Code Formatting**: Applies Prettier formatting to all code files
+- **Commit Integration**: Pushes fixes back to the repository when needed
+- **Branch Protection**: Ensures code quality before merging pull requests
+
+### 📊 Code Quality Metrics
+
+Our codebase maintains high quality standards through:
+
+```bash
+# Current Quality Stats
+✅ ESLint: 0 errors, 0 warnings
+✅ Prettier: All files formatted correctly
+✅ Build: All applications compile successfully
+✅ Tailwind: Classes properly sorted and optimized
+```
+
+### 🛠️ Development Tools Integration
+
+#### ESLint Configuration
+- **Frontend**: React-specific rules with hooks and JSX best practices
+- **Backend**: Node.js ES modules with modern JavaScript standards
+- **Shared**: Prettier integration to avoid conflicts
+
+#### Prettier Configuration
+- **Frontend**: Includes Tailwind CSS class sorting plugin
+- **Backend**: Standard JavaScript/Node.js formatting
+- **Global**: Consistent spacing, quotes, and line endings
+
+### 🚦 Workflow Status
+
+Check the status of our automated workflows:
+- ![Code Quality](https://github.com/username/repo/workflows/Code%20Quality%20Check/badge.svg)
+- ![PR Check](https://github.com/username/repo/workflows/Pull%20Request%20Check/badge.svg)
+- ![Auto Format](https://github.com/username/repo/workflows/Auto%20Format%20Code/badge.svg)
+
 ## 🧪 Testing
 
 ### Frontend Testing
@@ -540,6 +711,13 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 
 ## 📈 Roadmap
 
+### ✅ Completed Features (v1.5)
+- [x] **GitHub Actions CI/CD** - Automated testing and deployment
+- [x] **Code Quality Automation** - ESLint + Prettier integration
+- [x] **Tailwind Class Sorting** - Automatic CSS organization
+- [x] **Cross-platform Scripts** - Development workflow automation
+- [x] **Auto-fixing Pipeline** - Automatic code quality improvements
+
 ### Version 2.0 Features
 - [ ] **Real-time Chat** - WebSocket integration
 - [ ] **Advanced Analytics** - User engagement metrics
@@ -553,9 +731,12 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 ### Technical Improvements
 - [ ] **GraphQL API** - Alternative to REST API
 - [ ] **Microservices** - Split into smaller services
+- [x] **CI/CD Pipeline** - ✅ Automated testing and deployment (GitHub Actions)
 - [ ] **Testing Coverage** - Achieve 90%+ test coverage
 - [ ] **Performance Monitoring** - Add APM tools
-- [ ] **CI/CD Pipeline** - Automated testing and deployment
+- [ ] **Security Scanning** - Automated vulnerability checks
+- [ ] **Docker Containers** - Containerized deployment
+- [ ] **Database Optimization** - Query performance improvements
 
 ## 📄 License
 
@@ -614,7 +795,7 @@ A: Currently web-only, but mobile app is in the roadmap.
 
 **⭐ Star this repository if you find it useful!**
 
-[🐛 Report Bug](https://github.com/github-nqvnlc/blog-app/issues) • [✨ Request Feature](https://github.com/github-nqvnlc/blog-app/issues) • [📖 Documentation](./docs/)
+[🐛 Report Bug](https://github.com/github-nqvnlc/blog-app/issues) • [✨ Request Feature](https://github.com/github-nqvnlc/blog-app/issues) • [📖 Documentation](./docs/) • [🤖 GitHub Actions](./.github/workflows/README.md)
 
 *Built with ❤️ by Van Loc using modern web technologies*
 

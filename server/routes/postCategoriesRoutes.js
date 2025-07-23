@@ -1,4 +1,4 @@
-import express from "express";
+import express from 'express';
 const router = express.Router();
 import {
   createPostCategory,
@@ -6,16 +6,16 @@ import {
   getAllPostCategories,
   updatePostCategory,
   getSingleCategory,
-} from "../controllers/postCategoriesController.js";
-import { adminGuard, authGuard } from "../middleware/authMiddleware.js";
+} from '../controllers/postCategoriesController.js';
+import { adminGuard, authGuard } from '../middleware/authMiddleware.js';
 
 router
-  .route("/")
+  .route('/')
   .post(authGuard, adminGuard, createPostCategory)
   .get(getAllPostCategories);
 
 router
-  .route("/:postCategoryId")
+  .route('/:postCategoryId')
   .get(getSingleCategory)
   .put(authGuard, adminGuard, updatePostCategory)
   .delete(authGuard, adminGuard, deletePostCategory);

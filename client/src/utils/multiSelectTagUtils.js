@@ -1,4 +1,4 @@
-export const categoryToOption = (category) => ({
+export const categoryToOption = category => ({
   value: category._id,
   label: category.title,
 });
@@ -6,7 +6,7 @@ export const categoryToOption = (category) => ({
 export const filterCategories = (inputValue, categoriesData) => {
   const filteredOptions = categoriesData
     .map(categoryToOption)
-    .filter((category) =>
+    .filter(category =>
       category.label.toLowerCase().includes(inputValue.toLowerCase())
     );
 

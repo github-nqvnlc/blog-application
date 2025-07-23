@@ -1,8 +1,8 @@
-import { uploadPicture } from "../middleware/uploadPictureMiddleware.js";
-import Comment from "../models/Comment.js";
-import Post from "../models/Post.js";
-import User from "../models/User.js";
-import { fileRemover } from "../utils/fileRemover.js";
+import { uploadPicture } from '../middleware/uploadPictureMiddleware.js';
+import Comment from '../models/Comment.js';
+import Post from '../models/Post.js';
+import User from '../models/User.js';
+import { fileRemover } from '../utils/fileRemover.js';
 
 const registerUser = async (req, res, next) => {
   try {
@@ -12,7 +12,7 @@ const registerUser = async (req, res, next) => {
     let user = await User.findOne({ email });
 
     if (user) {
-      throw new Error("User have already registered");
+      throw new Error('User have already registered');
     }
 
     // creating a new user
@@ -40,10 +40,10 @@ const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    let user = await User.findOne({ email });
+    const user = await User.findOne({ email });
 
     if (!user) {
-      throw new Error("Email not found");
+      throw new Error('Email not found');
     }
 
     if (await user.comparePassword(password)) {
@@ -57,7 +57,7 @@ const loginUser = async (req, res, next) => {
         token: await user.generateJWT(),
       });
     } else {
-      throw new Error("Invalid email or password");
+      throw new Error('Invalid email or password');
     }
   } catch (error) {
     next(error);
@@ -66,7 +66,7 @@ const loginUser = async (req, res, next) => {
 
 const userProfile = async (req, res, next) => {
   try {
-    let user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id);
 
     if (user) {
       return res.status(201).json({
@@ -78,7 +78,7 @@ const userProfile = async (req, res, next) => {
         admin: user.admin,
       });
     } else {
-      let error = new Error("User not found");
+      const error = new Error('User not found');
       error.statusCode = 404;
       next(error);
     }
@@ -91,28 +91,28 @@ const updateProfile = async (req, res, next) => {
   try {
     const userIdToUpdate = req.params.userId;
 
-    let userId = req.user._id;
+    const userId = req.user._id;
 
     if (!req.user.admin && userId !== userIdToUpdate) {
-      let error = new Error("Forbidden resource");
+      const error = new Error('Forbidden resource');
       error.statusCode = 403;
       throw error;
     }
 
-    let user = await User.findById(userIdToUpdate);
+    const user = await User.findById(userIdToUpdate);
 
     if (!user) {
-      throw new Error("User not found");
+      throw new Error('User not found');
     }
 
-    if (typeof req.body.admin !== "undefined" && req.user.admin) {
+    if (typeof req.body.admin !== 'undefined' && req.user.admin) {
       user.admin = req.body.admin;
     }
 
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
     if (req.body.password && req.body.password.length < 6) {
-      throw new Error("Password length must be at least 6 character");
+      throw new Error('Password length must be at least 6 character');
     } else if (req.body.password) {
       user.password = req.body.password;
     }
@@ -135,20 +135,19 @@ const updateProfile = async (req, res, next) => {
 
 const updateProfilePicture = async (req, res, next) => {
   try {
-    const upload = uploadPicture.single("profilePicture");
+    const upload = uploadPicture.single('profilePicture');
 
-    upload(req, res, async function (err) {
+    upload(req, res, async err => {
       if (err) {
         const error = new Error(
-          "An unknown error occured when uploading " + err.message
+          'An unknown error occured when uploading ' + err.message
         );
         next(error);
       } else {
         // every thing went well
         if (req.file) {
-          let filename;
-          let updatedUser = await User.findById(req.user._id);
-          filename = updatedUser.avatar;
+          const updatedUser = await User.findById(req.user._id);
+          const filename = updatedUser.avatar;
           if (filename) {
             fileRemover(filename);
           }
@@ -164,10 +163,9 @@ const updateProfilePicture = async (req, res, next) => {
             token: await updatedUser.generateJWT(),
           });
         } else {
-          let filename;
-          let updatedUser = await User.findById(req.user._id);
-          filename = updatedUser.avatar;
-          updatedUser.avatar = "";
+          const updatedUser = await User.findById(req.user._id);
+          const filename = updatedUser.avatar;
+          updatedUser.avatar = '';
           await updatedUser.save();
           fileRemover(filename);
           res.json({
@@ -190,11 +188,11 @@ const updateProfilePicture = async (req, res, next) => {
 const getAllUsers = async (req, res, next) => {
   try {
     const filter = req.query.searchKeyword;
-    let where = {};
+    const where = {};
     if (filter) {
-      where.email = { $regex: filter, $options: "i" };
+      where.email = { $regex: filter, $options: 'i' };
     }
-    let query = User.find(where);
+    const query = User.find(where);
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * pageSize;
@@ -202,11 +200,11 @@ const getAllUsers = async (req, res, next) => {
     const pages = Math.ceil(total / pageSize);
 
     res.header({
-      "x-filter": filter,
-      "x-totalcount": JSON.stringify(total),
-      "x-currentpage": JSON.stringify(page),
-      "x-pagesize": JSON.stringify(pageSize),
-      "x-totalpagecount": JSON.stringify(pages),
+      'x-filter': filter,
+      'x-totalcount': JSON.stringify(total),
+      'x-currentpage': JSON.stringify(page),
+      'x-pagesize': JSON.stringify(pageSize),
+      'x-totalpagecount': JSON.stringify(pages),
     });
 
     if (page > pages) {
@@ -216,7 +214,7 @@ const getAllUsers = async (req, res, next) => {
     const result = await query
       .skip(skip)
       .limit(pageSize)
-      .sort({ updatedAt: "desc" });
+      .sort({ updatedAt: 'desc' });
 
     return res.json(result);
   } catch (error) {
@@ -226,14 +224,14 @@ const getAllUsers = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   try {
-    let user = await User.findById(req.params.userId);
+    const user = await User.findById(req.params.userId);
 
     if (!user) {
-      throw new Error("User no found");
+      throw new Error('User no found');
     }
 
     const postsToDelete = await Post.find({ user: user._id });
-    const postIdsToDelete = postsToDelete.map((post) => post._id);
+    const postIdsToDelete = postsToDelete.map(post => post._id);
 
     await Comment.deleteMany({
       post: { $in: postIdsToDelete },
@@ -243,14 +241,14 @@ const deleteUser = async (req, res, next) => {
       _id: { $in: postIdsToDelete },
     });
 
-    postsToDelete.forEach((post) => {
+    postsToDelete.forEach(post => {
       fileRemover(post.photo);
     });
 
     await user.remove();
     fileRemover(user.avatar);
 
-    res.status(204).json({ message: "User is deleted successfully" });
+    res.status(204).json({ message: 'User is deleted successfully' });
   } catch (error) {
     next(error);
   }

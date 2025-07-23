@@ -1,5 +1,5 @@
-import PostCategories from "../models/PostCategories.js";
-import Post from "../models/Post.js";
+import PostCategories from '../models/PostCategories.js';
+import Post from '../models/Post.js';
 
 const createPostCategory = async (req, res, next) => {
   try {
@@ -8,7 +8,7 @@ const createPostCategory = async (req, res, next) => {
     const postCategory = await PostCategories.findOne({ title });
 
     if (postCategory) {
-      const error = new Error("Category is already created!");
+      const error = new Error('Category is already created!');
       return next(error);
     }
 
@@ -31,7 +31,7 @@ const getSingleCategory = async (req, res, next) => {
     );
 
     if (!postCategory) {
-      const error = new Error("Category was not found!");
+      const error = new Error('Category was not found!');
       return next(error);
     }
 
@@ -44,11 +44,11 @@ const getSingleCategory = async (req, res, next) => {
 const getAllPostCategories = async (req, res, next) => {
   try {
     const filter = req.query.searchKeyword;
-    let where = {};
+    const where = {};
     if (filter) {
-      where.title = { $regex: filter, $options: "i" };
+      where.title = { $regex: filter, $options: 'i' };
     }
-    let query = PostCategories.find(where);
+    const query = PostCategories.find(where);
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * pageSize;
@@ -56,11 +56,11 @@ const getAllPostCategories = async (req, res, next) => {
     const pages = Math.ceil(total / pageSize);
 
     res.header({
-      "x-filter": filter,
-      "x-totalcount": JSON.stringify(total),
-      "x-currentpage": JSON.stringify(page),
-      "x-pagesize": JSON.stringify(pageSize),
-      "x-totalpagecount": JSON.stringify(pages),
+      'x-filter': filter,
+      'x-totalcount': JSON.stringify(total),
+      'x-currentpage': JSON.stringify(page),
+      'x-pagesize': JSON.stringify(pageSize),
+      'x-totalpagecount': JSON.stringify(pages),
     });
 
     if (page > pages) {
@@ -70,7 +70,7 @@ const getAllPostCategories = async (req, res, next) => {
     const result = await query
       .skip(skip)
       .limit(pageSize)
-      .sort({ updatedAt: "desc" });
+      .sort({ updatedAt: 'desc' });
 
     return res.json(result);
   } catch (error) {
@@ -93,7 +93,7 @@ const updatePostCategory = async (req, res, next) => {
     );
 
     if (!postCategory) {
-      const error = new Error("Category was not found");
+      const error = new Error('Category was not found');
       return next(error);
     }
 
@@ -115,7 +115,7 @@ const deletePostCategory = async (req, res, next) => {
     await PostCategories.deleteOne({ _id: categoryId });
 
     res.send({
-      message: "Post category is successfully deleted!",
+      message: 'Post category is successfully deleted!',
     });
   } catch (error) {
     next(error);

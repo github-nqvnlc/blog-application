@@ -1,10 +1,8 @@
-import { images, stables } from "../../../../constants";
-import { deletePost, getAllPosts } from "../../../../services/index/posts";
-import Pagination from "../../../../components/Pagination";
-import { toast } from "react-hot-toast";
-import { Link } from "react-router-dom";
-import { useDataTable } from "../../../../hooks/useDataTable";
-import DataTable from "../../components/DataTable";
+import { images, stables } from '../../../../constants';
+import { deletePost, getAllPosts } from '../../../../services/index/posts';
+import { Link } from 'react-router-dom';
+import { useDataTable } from '../../../../hooks/useDataTable';
+import DataTable from '../../components/DataTable';
 
 const ManagePosts = () => {
   const {
@@ -15,15 +13,14 @@ const ManagePosts = () => {
     isLoading,
     isFetching,
     isLoadingDeleteData,
-    queryClient,
     searchKeywordHandler,
     submitSearchKeywordHandler,
     deleteDataHandler,
     setCurrentPage,
   } = useDataTable({
     dataQueryFn: () => getAllPosts(searchKeyword, currentPage),
-    dataQueryKey: "posts",
-    deleteDataMessage: "Post is deleted",
+    dataQueryKey: 'posts',
+    deleteDataMessage: 'Post is deleted',
     mutateDeleteFn: ({ slug, token }) => {
       return deletePost({
         slug,
@@ -34,13 +31,13 @@ const ManagePosts = () => {
 
   return (
     <DataTable
-      pageTitle="Manage Posts"
-      dataListName="Posts"
-      searchInputPlaceHolder="Post title..."
+      pageTitle='Manage Posts'
+      dataListName='Posts'
+      searchInputPlaceHolder='Post title...'
       searchKeywordOnSubmitHandler={submitSearchKeywordHandler}
       searchKeywordOnChangeHandler={searchKeywordHandler}
       searchKeyword={searchKeyword}
-      tableHeaderTitleList={["Title", "Category", "Created At", "Tags", ""]}
+      tableHeaderTitleList={['Title', 'Category', 'Created At', 'Tags', '']}
       isLoading={isLoading}
       isFetching={isFetching}
       data={postsData?.data}
@@ -49,12 +46,12 @@ const ManagePosts = () => {
       headers={postsData?.headers}
       userState={userState}
     >
-      {postsData?.data.map((post) => (
+      {postsData?.data.map(post => (
         <tr>
-          <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <a href="/" className="relative block">
+          <td className='border-b border-gray-200 bg-white px-5 py-5 text-sm'>
+            <div className='flex items-center'>
+              <div className='flex-shrink-0'>
+                <a href='/' className='relative block'>
                   <img
                     src={
                       post?.photo
@@ -62,17 +59,17 @@ const ManagePosts = () => {
                         : images.samplePostImage
                     }
                     alt={post.title}
-                    className="mx-auto object-cover rounded-lg w-10 aspect-square"
+                    className='mx-auto aspect-square w-10 rounded-lg object-cover'
                   />
                 </a>
               </div>
-              <div className="ml-3">
-                <p className="text-gray-900 whitespace-no-wrap">{post.title}</p>
+              <div className='ml-3'>
+                <p className='whitespace-no-wrap text-gray-900'>{post.title}</p>
               </div>
             </div>
           </td>
-          <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-            <p className="text-gray-900 whitespace-no-wrap">
+          <td className='border-b border-gray-200 bg-white px-5 py-5 text-sm'>
+            <p className='whitespace-no-wrap text-gray-900'>
               {post.categories.length > 0
                 ? post.categories
                     .slice(0, 3)
@@ -80,39 +77,39 @@ const ManagePosts = () => {
                       (category, index) =>
                         `${category.title}${
                           post.categories.slice(0, 3).length === index + 1
-                            ? ""
-                            : ", "
+                            ? ''
+                            : ', '
                         }`
                     )
-                : "Uncategorized"}
+                : 'Uncategorized'}
             </p>
           </td>
-          <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-            <p className="text-gray-900 whitespace-no-wrap">
-              {new Date(post.createdAt).toLocaleDateString("en-US", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
+          <td className='border-b border-gray-200 bg-white px-5 py-5 text-sm'>
+            <p className='whitespace-no-wrap text-gray-900'>
+              {new Date(post.createdAt).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
               })}
             </p>
           </td>
-          <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-            <div className="flex gap-x-2">
+          <td className='border-b border-gray-200 bg-white px-5 py-5 text-sm'>
+            <div className='flex gap-x-2'>
               {post.tags.length > 0
                 ? post.tags.map((tag, index) => (
                     <p>
                       {tag}
-                      {post.tags.length - 1 !== index && ","}
+                      {post.tags.length - 1 !== index && ','}
                     </p>
                   ))
-                : "No tags"}
+                : 'No tags'}
             </div>
           </td>
-          <td className="px-5 py-5 text-sm bg-white border-b border-gray-200 space-x-5">
+          <td className='space-x-5 border-b border-gray-200 bg-white px-5 py-5 text-sm'>
             <button
               disabled={isLoadingDeleteData}
-              type="button"
-              className="text-red-600 hover:text-red-900 disabled:opacity-70 disabled:cursor-not-allowed"
+              type='button'
+              className='text-red-600 hover:text-red-900 disabled:cursor-not-allowed disabled:opacity-70'
               onClick={() => {
                 deleteDataHandler({
                   slug: post?.slug,
@@ -124,7 +121,7 @@ const ManagePosts = () => {
             </button>
             <Link
               to={`/admin/posts/manage/edit/${post?.slug}`}
-              className="text-green-600 hover:text-green-900"
+              className='text-green-600 hover:text-green-900'
             >
               Edit
             </Link>

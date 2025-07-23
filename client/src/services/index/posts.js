@@ -1,9 +1,14 @@
-import axios from "axios";
+import axios from 'axios';
 
-export const getAllPosts = async (searchKeyword = "", page = 1, limit = 10, categories = []) => {
+export const getAllPosts = async (
+  searchKeyword = '',
+  page = 1,
+  limit = 10,
+  categories = []
+) => {
   try {
     const { data, headers } = await axios.get(
-      `/api/posts?searchKeyword=${searchKeyword}&page=${page}&limit=${limit}&categories=${categories.join(",")}`
+      `/api/posts?searchKeyword=${searchKeyword}&page=${page}&limit=${limit}&categories=${categories.join(',')}`
     );
     return { data, headers };
   } catch (error) {

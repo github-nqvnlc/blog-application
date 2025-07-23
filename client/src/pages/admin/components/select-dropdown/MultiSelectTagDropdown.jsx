@@ -1,4 +1,4 @@
-import AsyncSelect from "react-select/async";
+import AsyncSelect from 'react-select/async';
 
 const MultiSelectTagDropdown = ({
   defaultValue = [],
@@ -11,7 +11,7 @@ const MultiSelectTagDropdown = ({
       defaultOptions
       isMulti
       loadOptions={loadOptions}
-      className="relative z-20"
+      className='relative z-20'
       onChange={onChange}
     />
   );

@@ -1,4 +1,4 @@
-import express from "express";
+import express from 'express';
 const router = express.Router();
 import {
   createPost,
@@ -6,12 +6,12 @@ import {
   getAllPosts,
   getPost,
   updatePost,
-} from "../controllers/postControllers.js";
-import { authGuard, adminGuard } from "../middleware/authMiddleware.js";
+} from '../controllers/postControllers.js';
+import { authGuard, adminGuard } from '../middleware/authMiddleware.js';
 
-router.route("/").post(authGuard, adminGuard, createPost).get(getAllPosts);
+router.route('/').post(authGuard, adminGuard, createPost).get(getAllPosts);
 router
-  .route("/:slug")
+  .route('/:slug')
   .put(authGuard, adminGuard, updatePost)
   .delete(authGuard, adminGuard, deletePost)
   .get(getPost);

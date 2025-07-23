@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const getAllCategories = async (
-  searchKeyword = "",
+  searchKeyword = '',
   page = 1,
   limit = 10
 ) => {

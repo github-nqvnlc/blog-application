@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import Comment from "./Comment";
-import CommentForm from "./CommentForm";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Comment from './Comment';
+import CommentForm from './CommentForm';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   createNewComment,
   deleteComment,
   updateComment,
-} from "../../services/index/comments";
-import { toast } from "react-hot-toast";
+} from '../../services/index/comments';
+import { toast } from 'react-hot-toast';
 
 const CommentsContainer = ({
   className,
@@ -18,7 +18,7 @@ const CommentsContainer = ({
   postSlug,
 }) => {
   const queryClient = useQueryClient();
-  const userState = useSelector((state) => state.user);
+  const userState = useSelector(state => state.user);
   const [affectedComment, setAffectedComment] = useState(null);
 
   const { mutate: mutateNewComment, isLoading: isLoadingNewComment } =
@@ -28,12 +28,12 @@ const CommentsContainer = ({
       },
       onSuccess: () => {
         toast.success(
-          "Your comment is sent successfully, it will be visible after the confirmation of the Admin"
+          'Your comment is sent successfully, it will be visible after the confirmation of the Admin'
         );
       },
-      onError: (error) => {
+      onError: error => {
         toast.error(error.message);
-        console.log(error);
+        console.error(error);
       },
     });
 
@@ -42,26 +42,26 @@ const CommentsContainer = ({
       return updateComment({ token, desc, commentId });
     },
     onSuccess: () => {
-      toast.success("Your comment is updated successfully");
-      queryClient.invalidateQueries(["blog", postSlug]);
+      toast.success('Your comment is updated successfully');
+      queryClient.invalidateQueries(['blog', postSlug]);
     },
-    onError: (error) => {
+    onError: error => {
       toast.error(error.message);
-      console.log(error);
+      console.error(error);
     },
   });
 
   const { mutate: mutateDeleteComment } = useMutation({
-    mutationFn: ({ token, desc, commentId }) => {
+    mutationFn: ({ token, commentId }) => {
       return deleteComment({ token, commentId });
     },
     onSuccess: () => {
-      toast.success("Your comment is deleted successfully");
-      queryClient.invalidateQueries(["blog", postSlug]);
+      toast.success('Your comment is deleted successfully');
+      queryClient.invalidateQueries(['blog', postSlug]);
     },
-    onError: (error) => {
+    onError: error => {
       toast.error(error.message);
-      console.log(error);
+      console.error(error);
     },
   });
 
@@ -85,19 +85,19 @@ const CommentsContainer = ({
     setAffectedComment(null);
   };
 
-  const deleteCommentHandler = (commentId) => {
+  const deleteCommentHandler = commentId => {
     mutateDeleteComment({ token: userState.userInfo.token, commentId });
   };
 
   return (
     <div className={`${className}`}>
       <CommentForm
-        btnLabel="Send"
-        formSubmitHanlder={(value) => addCommentHandler(value)}
+        btnLabel='Send'
+        formSubmitHanlder={value => addCommentHandler(value)}
         loading={isLoadingNewComment}
       />
-      <div className="space-y-4 mt-8">
-        {comments.map((comment) => (
+      <div className='mt-8 space-y-4'>
+        {comments.map(comment => (
           <Comment
             key={comment._id}
             comment={comment}

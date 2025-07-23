@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const signup = async ({ name, email, password }) => {
   try {
-    const { data } = await axios.post("/api/users/register", {
+    const { data } = await axios.post('/api/users/register', {
       name,
       email,
       password,
@@ -17,7 +17,7 @@ export const signup = async ({ name, email, password }) => {
 
 export const login = async ({ email, password }) => {
   try {
-    const { data } = await axios.post("/api/users/login", {
+    const { data } = await axios.post('/api/users/login', {
       email,
       password,
     });
@@ -37,7 +37,7 @@ export const getUserProfile = async ({ token }) => {
       },
     };
 
-    const { data } = await axios.get("/api/users/profile", config);
+    const { data } = await axios.get('/api/users/profile', config);
     return data;
   } catch (error) {
     if (error.response && error.response.data.message)
@@ -71,13 +71,13 @@ export const updateProfilePicture = async ({ token, formData }) => {
   try {
     const config = {
       headers: {
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
       },
     };
 
     const { data } = await axios.put(
-      "/api/users/updateProfilePicture",
+      '/api/users/updateProfilePicture',
       formData,
       config
     );
@@ -91,7 +91,7 @@ export const updateProfilePicture = async ({ token, formData }) => {
 
 export const getAllUsers = async (
   token,
-  searchKeyword = "",
+  searchKeyword = '',
   page = 1,
   limit = 10
 ) => {
