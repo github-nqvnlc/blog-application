@@ -97,7 +97,7 @@ Create a `.env` file in the server directory:
 
 ```env
 # Database Configuration
-DB_URI=mongodb://localhost:27017/blog-app
+DB_URI=mongodb://localhost:27017/blog-application
 
 # JWT Configuration
 JWT_SECRET=your-super-secret-jwt-key-here
@@ -391,7 +391,7 @@ const corsOptions = {
 ```env
 # Production Environment Variables
 NODE_ENV=production
-DB_URI=mongodb+srv://username:password@cluster.mongodb.net/blog-app
+DB_URI=mongodb+srv://username:password@cluster.mongodb.net/blog-application
 JWT_SECRET=your-production-jwt-secret
 PORT=3001
 CLIENT_URL=https://your-frontend-domain.com
