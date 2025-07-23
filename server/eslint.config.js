@@ -48,19 +48,56 @@ export default [
   },
   {
     ignores: [
+      // Dependencies
       'node_modules/',
+
+      // Build outputs
       'dist/',
       'build/',
+
+      // Uploads directory (user generated content)
       'uploads/',
+
+      // Environment files
+      '.env*',
+
+      // Logs
+      'logs/',
       '*.log',
-      '*.min.js',
-      '*.bundle.js',
-      '*.db',
-      '*.sqlite',
-      'tmp/',
-      'temp/',
+      'npm-debug.log*',
+      'yarn-debug.log*',
+      'yarn-error.log*',
+
+      // Coverage directory
       'coverage/',
       '.nyc_output',
+
+      // Dependency directories
+      'jspm_packages/',
+
+      // Optional npm cache directory
+      '.npm',
+
+      // Optional REPL history
+      '.node_repl_history',
+
+      // Output of 'npm pack'
+      '*.tgz',
+
+      // Yarn Integrity file
+      '.yarn-integrity',
+
+      // Generated files
+      '*.min.js',
+      '*.bundle.js',
+
+      // Database files
+      '*.db',
+      '*.sqlite',
+
+      // Temporary files
+      'tmp/',
+      'temp/',
     ],
   },
   {
