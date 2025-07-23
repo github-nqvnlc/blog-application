@@ -1,0 +1,64 @@
+{
+  "name": "blog-application",
+  "version": "1.0.0",
+  "description": "A full-stack blog application with React frontend and Node.js backend",
+  "author": "Van Loc (locnv14)",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "install:all": "npm install && npm install --prefix client && npm install --prefix server",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:client": "cd client && npm start",
+    "dev:server": "cd server && npm run dev",
+    "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
+    "start:client": "cd client && npm start",
+    "start:server": "cd server && npm start",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "cd client && npm run build",
+    "build:server": "cd server && npm run build",
+    "test": "npm run test:client && npm run test:server",
+    "test:client": "cd client && npm test -- --watchAll=false",
+    "test:server": "cd server && npm test",
+    "lint": "npm run lint:client && npm run lint:server",
+    "lint:client": "cd client && npm run lint",
+    "lint:server": "cd server && npm run lint",
+    "clean": "npm run clean:client && npm run clean:server",
+    "clean:client": "cd client && rm -rf node_modules package-lock.json",
+    "clean:server": "cd server && rm -rf node_modules package-lock.json",
+    "clean:install": "npm run clean && npm run install:all",
+    "postinstall": "npm run install:all"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/github-nqvnlc/blog-application.git"
+  },
+  "keywords": [
+    "blog",
+    "react",
+    "nodejs",
+    "express",
+    "mongodb",
+    "fullstack",
+    "web-application",
+    "cms",
+    "content-management",
+    "jwt-authentication",
+    "tailwindcss",
+    "modern-web-development"
+  ],
+  "bugs": {
+    "url": "https://github.com/github-nqvnlc/blog-application/issues"
+  },
+  "homepage": "https://github.com/github-nqvnlc/blog-application#readme"
+} 
