@@ -112,7 +112,7 @@ cp .env.example .env
 
 ```env
 # Database Configuration
-DB_URI=mongodb://localhost:27017/blog-application
+DB_URI=mongodb://localhost:27017/blog-app
 
 # JWT Configuration
 JWT_SECRET=your-super-secret-jwt-key-here
@@ -417,7 +417,7 @@ services:
     ports:
       - "3001:3001"
     environment:
-      - DB_URI=mongodb://mongo:27017/blog-application
+      - DB_URI=mongodb://mongo:27017/blog-app
       - JWT_SECRET=your-secret
     depends_on:
       - mongo
@@ -614,7 +614,7 @@ A: Currently web-only, but mobile app is in the roadmap.
 
 **⭐ Star this repository if you find it useful!**
 
-[🐛 Report Bug](https://github.com/github-nqvnlc/blog-application/issues) • [✨ Request Feature](https://github.com/github-nqvnlc/blog-application/issues) • [📖 Documentation](./docs/)
+[🐛 Report Bug](https://github.com/github-nqvnlc/blog-app/issues) • [✨ Request Feature](https://github.com/github-nqvnlc/blog-app/issues) • [📖 Documentation](./docs/)
 
 *Built with ❤️ by Van Loc using modern web technologies*
 

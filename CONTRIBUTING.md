@@ -21,7 +21,7 @@ We love your input! We want to make contributing to this blog application as eas
 1. **Fork and Clone**
    ```bash
    # Fork the repo on GitHub, then clone your fork
-   git clone https://github.com/YOUR-USERNAME/blog-applicationlication.git
+   git clone https://github.com/YOUR-USERNAME/blog-application.git
    cd blog-application
    ```
 

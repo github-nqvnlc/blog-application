@@ -41,7 +41,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/github-nqvnlc/blog-applicationlication.git"
+    "url": "https://github.com/github-nqvnlc/blog-application.git"
   },
   "keywords": [
     "blog",
@@ -58,7 +58,7 @@
     "modern-web-development"
   ],
   "bugs": {
-    "url": "https://github.com/github-nqvnlc/blog-applicationlication/issues"
+    "url": "https://github.com/github-nqvnlc/blog-application/issues"
   },
-  "homepage": "https://github.com/github-nqvnlc/blog-applicationlication#readme"
+  "homepage": "https://github.com/github-nqvnlc/blog-application#readme"
 } 
