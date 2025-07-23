@@ -152,3 +152,4 @@ With this Husky setup:
 ---
 
 🎉 **Setup complete! From now on, every commit will be automatically checked.**
+✅ Husky setup completed successfully!
