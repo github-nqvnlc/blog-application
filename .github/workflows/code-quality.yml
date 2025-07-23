@@ -1,0 +1,98 @@
+name: Code Quality Check
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: Install root dependencies
+      run: npm ci
+      
+    - name: Install client dependencies
+      run: |
+        cd client
+        npm ci
+        
+    - name: Install server dependencies
+      run: |
+        cd server
+        npm ci
+        
+    - name: Run ESLint on client
+      run: |
+        cd client
+        npm run lint
+        
+    - name: Run ESLint on server
+      run: |
+        cd server
+        npm run lint
+        
+    - name: Run Prettier check on client
+      run: |
+        cd client
+        npm run format:check
+        
+    - name: Run Prettier check on server
+      run: |
+        cd server
+        npm run format:check
+        
+    - name: Build client
+      run: |
+        cd client
+        npm run build
+        
+  lint-fix:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        npm ci
+        cd client && npm ci
+        cd ../server && npm ci
+        
+    - name: Run lint fix and format
+      run: |
+        npm run lint:fix
+        npm run format
+        
+    - name: Commit and push if changed
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git diff --staged --quiet || git commit -m "🔧 Auto-fix linting and formatting [skip ci]"
+        git push 

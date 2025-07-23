@@ -1,0 +1,236 @@
+name: README Automation & Updates
+
+on:
+  schedule:
+    # Update daily at 6 AM UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths: [ '.github/workflows/readme-automation.yml' ]
+
+jobs:
+  # 📊 Update GitHub Stats
+  update-github-stats:
+    name: 📊 Update GitHub Stats
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📊 Generate GitHub stats
+      uses: anmol098/waka-readme-stats@master
+      with:
+        WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        SHOW_PROJECTS: "True"
+        SHOW_LINES_OF_CODE: "True"
+        SHOW_LANGUAGE: "True"
+        SHOW_OS: "True"
+        SHOW_TIMEZONE: "True"
+        SHOW_EDITORS: "True"
+        SHOW_LANGUAGE_PER_REPO: "True"
+        SHOW_SHORT_INFO: "True"
+        SHOW_LOC_CHART: "False"
+
+  # 🏆 Update GitHub Profile Stats
+  update-profile-stats:
+    name: 🏆 Update Profile Stats
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+    
+    - name: 🏆 Generate comprehensive stats
+      run: |
+        # Create or update stats section in README
+        cat > github-stats.md << 'EOF'
+        ## 📊 GitHub Statistics
+        
+        ### 🔥 GitHub Stats
+        ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=github-nqvnlc&show_icons=true&theme=radical&hide_border=true&bg_color=0D1117)
+        
+        ### 💻 Most Used Languages
+        ![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=github-nqvnlc&layout=compact&theme=radical&hide_border=true&bg_color=0D1117)
+        
+        ### 🔥 GitHub Streak
+        ![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=github-nqvnlc&theme=radical&hide_border=true&background=0D1117)
+        
+        ### 📈 Activity Graph
+        ![GitHub Activity Graph](https://activity-graph.herokuapp.com/graph?username=github-nqvnlc&theme=react-dark&hide_border=true&bg_color=0D1117)
+        
+        ### 🏆 GitHub Trophies
+        ![GitHub Trophies](https://github-profile-trophy.vercel.app/?username=github-nqvnlc&theme=radical&no-frame=true&no-bg=true&margin-w=4)
+        
+        ### 📊 Profile Views
+        ![Profile Views](https://komarev.com/ghpvc/?username=github-nqvnlc&color=brightgreen&style=flat-square&label=Profile+Views)
+        
+        EOF
+    
+    - name: 📝 Update README with stats
+      run: |
+        # Check if README has stats section
+        if grep -q "<!-- GITHUB_STATS:START -->" README.md; then
+          # Replace existing stats
+          sed -i '/<!-- GITHUB_STATS:START -->/,/<!-- GITHUB_STATS:END -->/c\
+        <!-- GITHUB_STATS:START -->\
+        '"$(cat github-stats.md | sed 's/$/\\/')"'\
+        <!-- GITHUB_STATS:END -->' README.md
+        else
+          # Add stats section at the end
+          echo "" >> README.md
+          echo "<!-- GITHUB_STATS:START -->" >> README.md
+          cat github-stats.md >> README.md
+          echo "<!-- GITHUB_STATS:END -->" >> README.md
+        fi
+    
+    - name: 💾 Commit changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add README.md
+        git diff --staged --quiet || git commit -m "📊 Updated GitHub stats in README"
+        git push
+
+  # 🎯 Update Project Metrics
+  update-project-metrics:
+    name: 🎯 Update Project Metrics
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: 📊 Generate project metrics
+      run: |
+        # Count lines of code
+        LOC_CLIENT=$(find client/src -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | xargs wc -l | tail -1 | awk '{print $1}')
+        LOC_SERVER=$(find server -name "*.js" | xargs wc -l | tail -1 | awk '{print $1}')
+        TOTAL_LOC=$((LOC_CLIENT + LOC_SERVER))
+        
+        # Count files
+        FILES_CLIENT=$(find client/src -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | wc -l)
+        FILES_SERVER=$(find server -name "*.js" | wc -l)
+        TOTAL_FILES=$((FILES_CLIENT + FILES_SERVER))
+        
+        # Count dependencies
+        DEPS_ROOT=$(cat package.json | grep -c '".*":' || echo 0)
+        DEPS_CLIENT=$(cat client/package.json | grep -c '".*":' || echo 0)
+        DEPS_SERVER=$(cat server/package.json | grep -c '".*":' || echo 0)
+        TOTAL_DEPS=$((DEPS_ROOT + DEPS_CLIENT + DEPS_SERVER))
+        
+        # Generate metrics
+        cat > project-metrics.md << EOF
+        ## 📈 Project Metrics
+        
+        | Metric | Client | Server | Total |
+        |--------|--------|--------|-------|
+        | 📄 Lines of Code | ${LOC_CLIENT} | ${LOC_SERVER} | **${TOTAL_LOC}** |
+        | 📁 Files | ${FILES_CLIENT} | ${FILES_SERVER} | **${TOTAL_FILES}** |
+        | 📦 Dependencies | ${DEPS_CLIENT} | ${DEPS_SERVER} | **${TOTAL_DEPS}** |
+        
+        ### 🏗️ Tech Stack Overview
+        - **Frontend**: React 18 + TypeScript + Tailwind CSS
+        - **Backend**: Node.js + Express + MongoDB
+        - **DevOps**: GitHub Actions + ESLint + Prettier
+        - **Testing**: Jest + React Testing Library
+        
+        ### 📊 Last Updated
+        *Updated on: $(date "+%Y-%m-%d %H:%M UTC")*
+        
+        EOF
+        
+        echo "Generated project metrics:"
+        cat project-metrics.md
+    
+    - name: 📝 Update README with metrics
+      run: |
+        # Update or add project metrics section
+        if grep -q "<!-- PROJECT_METRICS:START -->" README.md; then
+          sed -i '/<!-- PROJECT_METRICS:START -->/,/<!-- PROJECT_METRICS:END -->/c\
+        <!-- PROJECT_METRICS:START -->\
+        '"$(cat project-metrics.md | sed 's/$/\\/')"'\
+        <!-- PROJECT_METRICS:END -->' README.md
+        else
+          echo "" >> README.md
+          echo "<!-- PROJECT_METRICS:START -->" >> README.md
+          cat project-metrics.md >> README.md
+          echo "<!-- PROJECT_METRICS:END -->" >> README.md
+        fi
+    
+    - name: 💾 Commit metrics update
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add README.md
+        git diff --staged --quiet || git commit -m "📈 Updated project metrics in README"
+        git push
+
+  # 🌟 Update Contributors Section
+  update-contributors:
+    name: 🌟 Update Contributors
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🌟 Update contributors
+      uses: akhilmhdh/contributors-readme-action@v2.3.6
+      with:
+        image_size: 100
+        columns_per_row: 6
+        committer_username: "contributors-bot"
+        committer_email: "contributors-bot@users.noreply.github.com"
+
+  # 🎉 Fun Facts & Jokes
+  update-fun-section:
+    name: 🎉 Update Fun Section
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🎯 Add random dev joke
+      uses: abhisheknaiidu/random-meme-action@v1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  # 📅 Daily Summary
+  daily-summary:
+    name: 📅 Daily Summary
+    runs-on: ubuntu-latest
+    needs: [update-github-stats, update-project-metrics]
+    if: always()
+    
+    steps:
+    - name: 📅 Generate daily summary
+      run: |
+        echo "## 📅 Daily README Update Summary" >> $GITHUB_STEP_SUMMARY
+        echo "**Date**: $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Component | Status | Last Updated |" >> $GITHUB_STEP_SUMMARY
+        echo "|-----------|--------|--------------|" >> $GITHUB_STEP_SUMMARY
+        echo "| 📊 GitHub Stats | ${{ needs.update-github-stats.result }} | $(date '+%Y-%m-%d %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
+        echo "| 📈 Project Metrics | ${{ needs.update-project-metrics.result }} | $(date '+%Y-%m-%d %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🎯 Updates Applied" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ GitHub statistics and activity" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Project metrics and tech stack info" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Contributors recognition" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "🚀 **README.md is now fresh and up-to-date!**" >> $GITHUB_STEP_SUMMARY 

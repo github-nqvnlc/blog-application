@@ -1,0 +1,436 @@
+name: Fun Automation & Utilities
+
+on:
+  schedule:
+    # Run weekly on Mondays at 9 AM UTC
+    - cron: '0 9 * * 1'
+    # Daily fun updates at 12 PM UTC
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+  issues:
+    types: [opened, labeled]
+  pull_request:
+    types: [opened, closed]
+
+jobs:
+  # 🔄 Dependency Updates
+  dependency-updates:
+    name: 🔄 Dependency Updates
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: 🔄 Update dependencies with Dependabot
+      uses: dependabot/fetch-metadata@v1
+      with:
+        github-token: "${{ secrets.GITHUB_TOKEN }}"
+    
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: 📊 Check for outdated packages
+      run: |
+        echo "🔍 Checking for outdated packages..."
+        
+        echo "## 📊 Outdated Dependencies Report" > dependency-report.md
+        echo "Generated on: $(date)" >> dependency-report.md
+        echo "" >> dependency-report.md
+        
+        echo "### 📦 Root Dependencies" >> dependency-report.md
+        npm outdated --json > root-outdated.json || true
+        cat root-outdated.json >> dependency-report.md
+        echo "" >> dependency-report.md
+        
+        echo "### 🎨 Client Dependencies" >> dependency-report.md
+        cd client
+        npm outdated --json > ../client-outdated.json || true
+        cat ../client-outdated.json >> ../dependency-report.md
+        echo "" >> ../dependency-report.md
+        
+        echo "### 🚀 Server Dependencies" >> ../dependency-report.md
+        cd ../server
+        npm outdated --json > ../server-outdated.json || true
+        cat ../server-outdated.json >> ../dependency-report.md
+    
+    - name: 📋 Create dependency update issue
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const reportContent = fs.readFileSync('dependency-report.md', 'utf8');
+          
+          // Check if similar issue exists
+          const { data: issues } = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            labels: 'dependencies',
+            state: 'open'
+          });
+          
+          if (issues.length === 0) {
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🔄 Weekly Dependency Update Report - ${new Date().toISOString().split('T')[0]}`,
+              body: `${reportContent}\n\n---\n*This issue was automatically created by GitHub Actions*`,
+              labels: ['dependencies', 'maintenance', 'automated']
+            });
+          }
+
+  # 🎯 Issue Auto-Labeling
+  auto-label-issues:
+    name: 🎯 Auto-Label Issues
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues' && github.event.action == 'opened'
+    
+    steps:
+    - name: 🏷️ Auto-label based on content
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const issueBody = context.payload.issue.body || '';
+          const issueTitle = context.payload.issue.title || '';
+          const content = (issueTitle + ' ' + issueBody).toLowerCase();
+          
+          let labels = [];
+          
+          // Auto-detect issue type
+          if (content.includes('bug') || content.includes('error') || content.includes('broken')) {
+            labels.push('bug');
+          }
+          if (content.includes('feature') || content.includes('enhancement') || content.includes('improvement')) {
+            labels.push('enhancement');
+          }
+          if (content.includes('question') || content.includes('help') || content.includes('how to')) {
+            labels.push('question');
+          }
+          if (content.includes('documentation') || content.includes('docs') || content.includes('readme')) {
+            labels.push('documentation');
+          }
+          
+          // Auto-detect component
+          if (content.includes('client') || content.includes('frontend') || content.includes('react')) {
+            labels.push('frontend');
+          }
+          if (content.includes('server') || content.includes('backend') || content.includes('api')) {
+            labels.push('backend');
+          }
+          if (content.includes('ci') || content.includes('github action') || content.includes('workflow')) {
+            labels.push('ci/cd');
+          }
+          
+          // Auto-detect priority
+          if (content.includes('urgent') || content.includes('critical') || content.includes('asap')) {
+            labels.push('priority: high');
+          }
+          
+          if (labels.length > 0) {
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              labels: labels
+            });
+          }
+
+  # 🎉 Welcome New Contributors
+  welcome-contributors:
+    name: 🎉 Welcome New Contributors
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'opened'
+    
+    steps:
+    - name: 🎉 Welcome first-time contributors
+      uses: actions/github-script@v6
+      with:
+        script: |
+          // Check if this is the user's first contribution
+          const { data: pulls } = await github.rest.pulls.list({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            creator: context.payload.pull_request.user.login,
+            state: 'all'
+          });
+          
+          if (pulls.length === 1) {
+            // This is their first PR
+            const welcomeMessage = `
+            ## 🎉 Welcome to the Blog Application project!
+            
+            Thank you for your first contribution! 🙌
+            
+            ### 📋 Checklist for your PR:
+            - [ ] Code follows our ESLint and Prettier rules
+            - [ ] Tests are added/updated (if applicable)
+            - [ ] Documentation is updated (if applicable)
+            - [ ] PR description clearly explains the changes
+            
+            ### 🚀 What happens next?
+            1. Our automated workflows will run quality checks
+            2. A maintainer will review your changes
+            3. We might request some changes or ask questions
+            4. Once approved, your code will be merged! 🎊
+            
+            ### 🔗 Helpful Resources:
+            - [Contributing Guidelines](./CONTRIBUTING.md)
+            - [Development Scripts](./README.md#development-scripts)
+            - [GitHub Actions Documentation](./.github/workflows/README.md)
+            
+            Thanks again for contributing! 🚀
+            `;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: welcomeMessage
+            });
+          }
+
+  # 📊 Weekly Project Stats
+  weekly-stats:
+    name: 📊 Weekly Project Stats
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📊 Generate weekly stats
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const oneWeekAgo = new Date();
+          oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+          
+          // Get commits from last week
+          const { data: commits } = await github.rest.repos.listCommits({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            since: oneWeekAgo.toISOString()
+          });
+          
+          // Get issues from last week
+          const { data: issues } = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            since: oneWeekAgo.toISOString(),
+            state: 'all'
+          });
+          
+          // Get PRs from last week
+          const { data: prs } = await github.rest.pulls.list({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'all',
+            sort: 'created',
+            direction: 'desc'
+          });
+          
+          const recentPRs = prs.filter(pr => new Date(pr.created_at) > oneWeekAgo);
+          
+          const statsReport = `
+          ## 📊 Weekly Project Statistics
+          
+          **Week of ${oneWeekAgo.toISOString().split('T')[0]} to ${new Date().toISOString().split('T')[0]}**
+          
+          ### 📈 Activity Summary
+          - 📝 **Commits**: ${commits.length}
+          - 🐛 **Issues**: ${issues.length}
+          - 🔄 **Pull Requests**: ${recentPRs.length}
+          - 👥 **Active Contributors**: ${new Set(commits.map(c => c.author?.login)).size}
+          
+          ### 🏆 Top Contributors This Week
+          ${commits.reduce((acc, commit) => {
+            const author = commit.author?.login || 'Unknown';
+            acc[author] = (acc[author] || 0) + 1;
+            return acc;
+          }, {})}
+          
+          ### 📋 Recent Issues
+          ${issues.slice(0, 5).map(issue => `- ${issue.title} (#${issue.number})`).join('\n')}
+          
+          ### 🔄 Recent Pull Requests
+          ${recentPRs.slice(0, 5).map(pr => `- ${pr.title} (#${pr.number}) - ${pr.state}`).join('\n')}
+          
+          ---
+          *Generated automatically by GitHub Actions* 🤖
+          `;
+          
+          // Create an issue with the stats
+          await github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: `📊 Weekly Stats Report - ${new Date().toISOString().split('T')[0]}`,
+            body: statsReport,
+            labels: ['report', 'statistics', 'weekly']
+          });
+
+  # 🎮 Fun Daily Updates
+  daily-fun:
+    name: 🎮 Daily Fun Updates
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' && contains(github.event.schedule, '0 12 * * *')
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🎯 Programming Quote of the Day
+      run: |
+        quotes=(
+          "\"Code is like humor. When you have to explain it, it's bad.\" - Cory House"
+          "\"First, solve the problem. Then, write the code.\" - John Johnson"
+          "\"Experience is the name everyone gives to their mistakes.\" - Oscar Wilde"
+          "\"In order to be irreplaceable, one must always be different.\" - Coco Chanel"
+          "\"Java is to JavaScript what car is to Carpet.\" - Chris Heilmann"
+          "\"Knowledge is power.\" - Francis Bacon"
+          "\"Sometimes it pays to stay in bed on Monday, rather than spending the rest of the week debugging Monday's code.\" - Dan Salomon"
+          "\"Perfection is achieved not when there is nothing more to add, but rather when there is nothing more to take away.\" - Antoine de Saint-Exupery"
+          "\"Ruby is rubbish! PHP is phpantastic!\" - Nikita Popov"
+          "\"Code never lies, comments sometimes do.\" - Ron Jeffries"
+        )
+        
+        # Get random quote
+        quote=${quotes[$RANDOM % ${#quotes[@]}]}
+        
+        echo "## 🎯 Quote of the Day" >> quote.md
+        echo "" >> quote.md
+        echo "$quote" >> quote.md
+        echo "" >> quote.md
+        echo "*Generated on $(date)*" >> quote.md
+        
+        echo "Today's quote: $quote"
+    
+    - name: 🎮 Coding Fact of the Day
+      run: |
+        facts=(
+          "🔍 The first computer bug was an actual bug - a moth trapped in a Harvard Mark II computer in 1947"
+          "💾 The term 'debugging' was coined by Admiral Grace Hopper"
+          "🌐 The first website ever created is still online: http://info.cern.ch/hypertext/WWW/TheProject.html"
+          "📱 The iPhone has more computing power than the computers used for the Apollo 11 moon landing"
+          "🎮 The first computer game was created in 1962 and was called 'Spacewar!'"
+          "💻 The first computer programming language was developed in the 1940s"
+          "🔢 Binary code consists of only 0s and 1s, representing off and on states"
+          "🎯 JavaScript was created in just 10 days by Brendan Eich in 1995"
+          "🔐 The term 'firewall' comes from the automotive industry"
+          "📊 90% of the world's data was created in the last two years"
+        )
+        
+        # Get random fact
+        fact=${facts[$RANDOM % ${#facts[@]}]}
+        
+        echo "## 🎮 Coding Fact of the Day" >> fact.md
+        echo "" >> fact.md
+        echo "$fact" >> fact.md
+        echo "" >> fact.md
+        echo "*Learn something new every day!*" >> fact.md
+        
+        echo "Today's fact: $fact"
+    
+    - name: 📤 Create daily fun issue
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const quote = fs.readFileSync('quote.md', 'utf8');
+          const fact = fs.readFileSync('fact.md', 'utf8');
+          
+          const funContent = `
+          ${quote}
+          
+          ${fact}
+          
+          ---
+          
+          ## 🚀 Development Motivation
+          
+          Keep coding, keep learning, and remember - every expert was once a beginner! 💪
+          
+          ### 🎯 Today's Challenge
+          Try to refactor one piece of code to make it more readable or efficient!
+          
+          ---
+          *Brought to you by the Daily Fun Bot* 🤖
+          `;
+          
+          await github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: `🎮 Daily Developer Inspiration - ${new Date().toISOString().split('T')[0]}`,
+            body: funContent,
+            labels: ['fun', 'daily', 'inspiration']
+          });
+
+  # 🧹 Cleanup Old Workflows
+  cleanup-workflows:
+    name: 🧹 Cleanup Old Workflows
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    
+    steps:
+    - name: 🧹 Delete old workflow runs
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const { data: workflows } = await github.rest.actions.listRepoWorkflows({
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          });
+          
+          for (const workflow of workflows.workflows) {
+            const { data: runs } = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: workflow.id,
+              status: 'completed',
+              per_page: 100
+            });
+            
+            // Keep last 50 runs, delete older ones
+            const runsToDelete = runs.workflow_runs.slice(50);
+            
+            for (const run of runsToDelete) {
+              await github.rest.actions.deleteWorkflowRun({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id: run.id
+              });
+            }
+          }
+
+  # 📋 Summary
+  fun-summary:
+    name: 📋 Fun Automation Summary
+    runs-on: ubuntu-latest
+    needs: [dependency-updates, weekly-stats, daily-fun]
+    if: always()
+    
+    steps:
+    - name: 📋 Generate summary
+      run: |
+        echo "## 🎮 Fun Automation Summary" >> $GITHUB_STEP_SUMMARY
+        echo "**Execution Date**: $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Automation | Status | Description |" >> $GITHUB_STEP_SUMMARY
+        echo "|------------|--------|-------------|" >> $GITHUB_STEP_SUMMARY
+        echo "| 🔄 Dependency Updates | ${{ needs.dependency-updates.result }} | Weekly dependency monitoring |" >> $GITHUB_STEP_SUMMARY
+        echo "| 📊 Weekly Stats | ${{ needs.weekly-stats.result }} | Project activity statistics |" >> $GITHUB_STEP_SUMMARY
+        echo "| 🎮 Daily Fun | ${{ needs.daily-fun.result }} | Motivation and inspiration |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🚀 Automation Features Active" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Auto-labeling for new issues" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Welcome messages for new contributors" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Weekly dependency monitoring" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Project statistics tracking" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Daily developer inspiration" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Automated workflow cleanup" >> $GITHUB_STEP_SUMMARY 

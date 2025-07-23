@@ -1,0 +1,2 @@
+# Run lint-staged to check and fix formatting/linting on staged files
+npm run lint-staged

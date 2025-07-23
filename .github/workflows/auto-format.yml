@@ -1,0 +1,76 @@
+name: Auto Format Code
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'client/src/**'
+      - 'server/**'
+      - '!**.md'
+
+jobs:
+  auto-format:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        npm ci
+        cd client && npm ci
+        cd ../server && npm ci
+        
+    - name: 🔧 Auto-fix ESLint issues
+      run: |
+        echo "🔧 Auto-fixing ESLint issues..."
+        npm run lint:fix || true
+        
+    - name: 🎨 Auto-format code
+      run: |
+        echo "🎨 Auto-formatting code..."
+        npm run format
+        
+    - name: 📋 Check for changes
+      id: verify-changed-files
+      run: |
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "📝 Files were changed by auto-formatting"
+        else
+          echo "changed=false" >> $GITHUB_OUTPUT
+          echo "✅ No changes needed"
+        fi
+        
+    - name: 📤 Commit and push changes
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action Bot"
+        git add .
+        git commit -m "🎨 Auto-format code and fix linting issues
+
+        - Applied ESLint auto-fixes
+        - Formatted code with Prettier
+        - Sorted Tailwind classes (client)
+        
+        [skip ci]"
+        git push
+        
+    - name: 📊 Summary
+      run: |
+        if [ "${{ steps.verify-changed-files.outputs.changed }}" = "true" ]; then
+          echo "🎉 Code has been automatically formatted and pushed!"
+        else
+          echo "✅ Code was already properly formatted. No changes needed."
+        fi 

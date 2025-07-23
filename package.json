@@ -5,35 +5,58 @@
   "author": "Van Loc (locnv14)",
   "license": "MIT",
   "private": true,
-  "workspaces": [
-    "client",
-    "server"
-  ],
   "scripts": {
-    "install:all": "npm install && npm install --prefix client && npm install --prefix server",
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:client": "cd client && npm start",
-    "dev:server": "cd server && npm run dev",
-    "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
-    "start:client": "cd client && npm start",
-    "start:server": "cd server && npm start",
-    "build": "npm run build:client && npm run build:server",
-    "build:client": "cd client && npm run build",
-    "build:server": "cd server && npm run build",
-    "test": "npm run test:client && npm run test:server",
-    "test:client": "cd client && npm test -- --watchAll=false",
-    "test:server": "cd server && npm test",
-    "lint": "npm run lint:client && npm run lint:server",
-    "lint:client": "cd client && npm run lint",
-    "lint:server": "cd server && npm run lint",
-    "clean": "npm run clean:client && npm run clean:server",
-    "clean:client": "cd client && rm -rf node_modules package-lock.json",
-    "clean:server": "cd server && rm -rf node_modules package-lock.json",
-    "clean:install": "npm run clean && npm run install:all",
-    "postinstall": "npm run install:all"
+    "install:all": "bash scripts/blog.sh install:all || scripts/blog.bat install:all",
+    "install:client": "bash scripts/blog.sh install:client || scripts/blog.bat install:client",
+    "install:server": "bash scripts/blog.sh install:server || scripts/blog.bat install:server",
+    "setup": "bash scripts/blog.sh setup || scripts/blog.bat setup",
+    "dev": "bash scripts/blog.sh dev || scripts/blog.bat dev",
+    "dev:client": "bash scripts/blog.sh dev:client || scripts/blog.bat dev:client",
+    "dev:server": "bash scripts/blog.sh dev:server || scripts/blog.bat dev:server",
+    "start": "bash scripts/blog.sh start || scripts/blog.bat start",
+    "start:client": "bash scripts/blog.sh start:client || scripts/blog.bat start:client",
+    "start:server": "bash scripts/blog.sh start:server || scripts/blog.bat start:server",
+    "build": "bash scripts/blog.sh build || scripts/blog.bat build",
+    "build:client": "bash scripts/blog.sh build:client || scripts/blog.bat build:client",
+    "build:server": "bash scripts/blog.sh build:server || scripts/blog.bat build:server",
+    "test": "bash scripts/blog.sh test || scripts/blog.bat test",
+    "test:client": "bash scripts/blog.sh test:client || scripts/blog.bat test:client",
+    "test:server": "bash scripts/blog.sh test:server || scripts/blog.bat test:server",
+    "lint": "bash scripts/blog.sh lint || scripts/blog.bat lint",
+    "lint:fix": "bash scripts/blog.sh lint:fix || scripts/blog.bat lint:fix",
+    "lint:client": "bash scripts/blog.sh lint:client || scripts/blog.bat lint:client",
+    "lint:client:fix": "bash scripts/blog.sh lint:client:fix || scripts/blog.bat lint:client:fix",
+    "lint:server": "bash scripts/blog.sh lint:server || scripts/blog.bat lint:server",
+    "lint:server:fix": "bash scripts/blog.sh lint:server:fix || scripts/blog.bat lint:server:fix",
+    "format": "bash scripts/blog.sh format || scripts/blog.bat format",
+    "format:check": "bash scripts/blog.sh format:check || scripts/blog.bat format:check",
+    "format:client": "bash scripts/blog.sh format:client || scripts/blog.bat format:client",
+    "format:server": "bash scripts/blog.sh format:server || scripts/blog.bat format:server",
+    "format:server:check": "bash scripts/blog.sh format:server:check || scripts/blog.bat format:server:check",
+    "clean": "bash scripts/blog.sh clean || scripts/blog.bat clean",
+    "clean:client": "bash scripts/blog.sh clean:client || scripts/blog.bat clean:client",
+    "clean:server": "bash scripts/blog.sh clean:server || scripts/blog.bat clean:server",
+    "clean:install": "bash scripts/blog.sh clean:install || scripts/blog.bat clean:install",
+    "prepare": "husky",
+    "lint-staged": "lint-staged"
   },
-  "devDependencies": {
-    "concurrently": "^7.6.0"
+  "lint-staged": {
+    "client/src/**/*.{js,jsx,ts,tsx}": [
+      "npm run lint:client:fix",
+      "npm run format:client"
+    ],
+    "server/**/*.js": [
+      "npm run lint:server:fix",
+      "npm run format:server"
+    ],
+    "*.{md,json}": [
+      "prettier --write"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
   "engines": {
     "node": ">=16.0.0",
@@ -41,7 +64,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/github-nqvnlc/blog-application.git"
+    "url": "git+https://github.com/github-nqvnlc/blog-application.git"
   },
   "keywords": [
     "blog",
@@ -60,5 +83,14 @@
   "bugs": {
     "url": "https://github.com/github-nqvnlc/blog-application/issues"
   },
-  "homepage": "https://github.com/github-nqvnlc/blog-application#readme"
-} 
+  "homepage": "https://github.com/github-nqvnlc/blog-application#readme",
+  "main": "index.js",
+  "type": "commonjs",
+  "devDependencies": {
+    "@commitlint/cli": "^19.4.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "husky": "^9.1.4",
+    "lint-staged": "^15.2.7",
+    "prettier": "^3.6.2"
+  }
+}
