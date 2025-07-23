@@ -1,39 +1,39 @@
-# 🐕 Husky Setup - Git Hooks cho Blog Application
+# 🐕 Husky Setup - Git Hooks for Blog Application
 
-Husky đã được setup để tự động kiểm tra code quality khi commit. Đây là hướng dẫn sử dụng.
+Husky has been set up to automatically check code quality when committing. This is the usage guide.
 
-## ✅ Setup đã hoàn thành
+## ✅ Setup Completed
 
-### 📦 Dependencies đã cài đặt:
+### 📦 Dependencies Installed:
 
 - `husky`: Git hooks management
-- `lint-staged`: Chạy linters trên staged files
-- `@commitlint/cli`: Kiểm tra commit message format
-- `@commitlint/config-conventional`: Rules cho conventional commits
+- `lint-staged`: Run linters on staged files
+- `@commitlint/cli`: Check commit message format
+- `@commitlint/config-conventional`: Rules for conventional commits
 
-### 🎯 Git Hooks đã setup:
+### 🎯 Git Hooks Configured:
 
 #### 1. **Pre-commit Hook** (`.husky/pre-commit`)
 
-- ✅ Tự động chạy ESLint và fix lỗi
-- ✅ Tự động format code với Prettier
-- ✅ Kiểm tra cho cả client (React) và server (Node.js)
-- ✅ Format markdown và JSON files
+- ✅ Automatically run ESLint and fix errors
+- ✅ Automatically format code with Prettier
+- ✅ Check both client (React) and server (Node.js)
+- ✅ Format markdown and JSON files
 
 #### 2. **Commit-msg Hook** (`.husky/commit-msg`)
 
-- ✅ Kiểm tra commit message theo chuẩn conventional commits
-- ✅ Đảm bảo commit messages có format đúng
+- ✅ Check commit message according to conventional commits standard
+- ✅ Ensure commit messages have correct format
 
-## 🚀 Cách sử dụng
+## 🚀 How to Use
 
-### 📝 Commit thông thường:
+### 📝 Regular Commit:
 
 ```bash
-# Stage files bạn muốn commit
+# Stage files you want to commit
 git add .
 
-# Commit với message hợp lệ
+# Commit with valid message
 git commit -m "feat: add new feature"
 ```
 
@@ -47,21 +47,21 @@ git commit -m "feat: add new feature"
 [optional footer]
 ```
 
-### 🎯 Các types hợp lệ:
+### 🎯 Valid Types:
 
-- `feat`: Tính năng mới
-- `fix`: Sửa bug
-- `docs`: Thay đổi documentation
-- `style`: Changes không ảnh hưởng logic (formatting, etc.)
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Changes that don't affect logic (formatting, etc.)
 - `refactor`: Code refactoring
-- `test`: Thêm hoặc sửa tests
+- `test`: Adding or fixing tests
 - `chore`: Maintenance tasks (build, deps, etc.)
 - `perf`: Performance improvements
 - `ci`: CI/CD changes
 - `build`: Build system changes
 - `revert`: Revert previous commit
 
-### ✅ Ví dụ commit messages hợp lệ:
+### ✅ Valid Commit Message Examples:
 
 ```bash
 git commit -m "feat: add user authentication"
@@ -73,55 +73,55 @@ git commit -m "test: add unit tests for auth module"
 git commit -m "chore: update dependencies"
 ```
 
-### ❌ Ví dụ commit messages không hợp lệ:
+### ❌ Invalid Commit Message Examples:
 
 ```bash
-git commit -m "fix stuff"              # Subject quá vague
-git commit -m "Add new feature"        # Không có type
-git commit -m "FEAT: add feature"      # Type phải lowercase
-git commit -m "feat: Add new feature." # Không được kết thúc bằng dấu chấm
+git commit -m "fix stuff"              # Subject too vague
+git commit -m "Add new feature"        # Missing type
+git commit -m "FEAT: add feature"      # Type must be lowercase
+git commit -m "feat: Add new feature." # Cannot end with period
 ```
 
 ## 🛠️ Lint-staged Configuration
 
-Khi commit, các files staged sẽ được xử lý tự động:
+When committing, staged files will be processed automatically:
 
 ### 📱 Client Files (React):
 
 - **Files**: `client/src/**/*.{js,jsx,ts,tsx}`
 - **Actions**:
   - `npm run lint:client:fix` - Fix ESLint errors
-  - `npm run format:client` - Format với Prettier + Tailwind sorting
+  - `npm run format:client` - Format with Prettier + Tailwind sorting
 
 ### 🚀 Server Files (Node.js):
 
 - **Files**: `server/**/*.js`
 - **Actions**:
   - `npm run lint:server:fix` - Fix ESLint errors
-  - `npm run format:server` - Format với Prettier
+  - `npm run format:server` - Format with Prettier
 
 ### 📄 Documentation Files:
 
 - **Files**: `*.{md,json}`
 - **Actions**:
-  - `prettier --write` - Format markdown và JSON
+  - `prettier --write` - Format markdown and JSON
 
 ## 🔧 Troubleshooting
 
-### ❌ Nếu pre-commit hook fail:
+### ❌ If pre-commit hook fails:
 
-1. Xem error messages để hiểu vấn đề
-2. Fix manually nếu auto-fix không hoạt động
-3. Add files đã fix và commit lại
+1. Check error messages to understand the issue
+2. Fix manually if auto-fix doesn't work
+3. Add fixed files and commit again
 
-### ❌ Nếu commit message bị reject:
+### ❌ If commit message is rejected:
 
-1. Kiểm tra format theo conventional commits
-2. Đảm bảo type hợp lệ và lowercase
-3. Không kết thúc subject bằng dấu chấm
-4. Giữ subject dưới 100 characters
+1. Check format according to conventional commits
+2. Ensure type is valid and lowercase
+3. Don't end subject with period
+4. Keep subject under 100 characters
 
-### 🔄 Bypass hooks (không khuyến khích):
+### 🔄 Bypass hooks (not recommended):
 
 ```bash
 # Bypass pre-commit hook
@@ -131,24 +131,24 @@ git commit --no-verify -m "message"
 git commit --no-verify -m "any message format"
 ```
 
-## 📊 Kết quả
+## 📊 Results
 
-Với Husky setup này:
+With this Husky setup:
 
-- ✅ **Code quality** được đảm bảo trước khi commit
-- ✅ **Consistent formatting** cho toàn dự án
-- ✅ **Conventional commits** giúp generate changelogs
-- ✅ **Team collaboration** được cải thiện
-- ✅ **CI/CD pipelines** ít bị fail do code quality issues
+- ✅ **Code quality** is ensured before commit
+- ✅ **Consistent formatting** for entire project
+- ✅ **Conventional commits** help generate changelogs
+- ✅ **Team collaboration** is improved
+- ✅ **CI/CD pipelines** fail less due to code quality issues
 
-## 🎯 Lợi ích
+## 🎯 Benefits
 
-1. **Tự động**: Không cần nhớ chạy lint/format manually
-2. **Consistent**: Tất cả team members có cùng code style
-3. **Fast feedback**: Phát hiện issues ngay khi commit
-4. **Professional**: Commit history đẹp và có ý nghĩa
-5. **Integration**: Hoạt động tốt với GitHub Actions workflows
+1. **Automated**: No need to remember running lint/format manually
+2. **Consistent**: All team members have same code style
+3. **Fast feedback**: Detect issues right when committing
+4. **Professional**: Beautiful and meaningful commit history
+5. **Integration**: Works well with GitHub Actions workflows
 
 ---
 
-🎉 **Setup hoàn tất! Từ giờ mọi commit sẽ được kiểm tra tự động.**
+🎉 **Setup complete! From now on, every commit will be automatically checked.**
