@@ -196,20 +196,6 @@ jobs:
         committer_username: "contributors-bot"
         committer_email: "contributors-bot@users.noreply.github.com"
 
-  # 🎉 Fun Facts & Jokes
-  update-fun-section:
-    name: 🎉 Update Fun Section
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: 📥 Checkout repository
-      uses: actions/checkout@v4
-    
-    - name: 🎯 Add random dev joke
-      uses: abhisheknaiidu/random-meme-action@v1
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-
   # 📅 Daily Summary
   daily-summary:
     name: 📅 Daily Summary

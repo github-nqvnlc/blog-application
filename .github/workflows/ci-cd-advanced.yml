@@ -236,7 +236,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-and-performance, integration-tests]
     if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
-    environment: staging
     
     steps:
     - name: 📥 Checkout code
@@ -273,7 +272,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-and-performance, integration-tests]
     if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production')
-    environment: production
     
     steps:
     - name: 📥 Checkout code
