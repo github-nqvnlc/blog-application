@@ -5,6 +5,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
 import cors from 'cors';
+import getCorsConfig from './config/corsConfig.js';
 import {
   errorResponserHandler,
   invalidPathHandler,
@@ -23,7 +24,11 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors());
+
+// Apply secure CORS configuration
+const corsConfig = getCorsConfig();
+app.use(cors(corsConfig));
+
 app.use(express.json());
 
 app.get('/', (req, res) => {
