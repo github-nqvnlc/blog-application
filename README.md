@@ -822,3 +822,23 @@ A: Currently web-only, but mobile app is in the roadmap.
 ![Profile Views](https://komarev.com/ghpvc/?username=github-nqvnlc&color=brightgreen&style=flat-square&label=Profile+Views)
 
 <!-- GITHUB_STATS:END -->
+
+<!-- PROJECT_METRICS:START -->
+## 📈 Project Metrics
+
+| Metric | Client | Server | Total |
+|--------|--------|--------|-------|
+| 📄 Lines of Code | 5257 | 1561 | **6818** |
+| 📁 Files | 71 | 25 | **96** |
+| 📦 Dependencies | 70 | 46 | **181** |
+
+### 🏗️ Tech Stack Overview
+- **Frontend**: React 18 + TypeScript + Tailwind CSS
+- **Backend**: Node.js + Express + MongoDB
+- **DevOps**: GitHub Actions + ESLint + Prettier
+- **Testing**: Jest + React Testing Library
+
+### 📊 Last Updated
+*Updated on: 2025-07-24 05:15 UTC*
+
+<!-- PROJECT_METRICS:END -->
