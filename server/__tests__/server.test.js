@@ -1,6 +1,6 @@
 /* eslint-disable */
 const request = require('supertest');
-const { createTestApp } = require('./testAppFactory');
+const { createTestApp } = require('../utils/testAppFactory');
 
 describe('Server Tests', () => {
   let app;
