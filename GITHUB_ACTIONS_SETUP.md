@@ -64,10 +64,13 @@ The workflows now use secure actions:
 
 ## 🔍 What Was Fixed
 
-- ✅ Added `permissions` block to workflows
-- ✅ Replaced manual `git push` with secure GitHub Action
+- ✅ Added `permissions` block to ALL workflows
+- ✅ Replaced manual `git push` with secure `stefanzweifel/git-auto-commit-action@v5`
 - ✅ Updated checkout actions with proper tokens
 - ✅ Set proper bot user credentials
+- ✅ Updated deprecated actions (download-artifact@v3 → v4)
+- ✅ Fixed CodeQL permissions for security scanning
+- ✅ Updated dependabot actions to latest versions
 
 ## 🚀 After Setup
 
