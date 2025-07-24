@@ -10,6 +10,12 @@ on:
     - cron: '0 2 * * 0'
   workflow_dispatch:
 
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+  pull-requests: write
+
 jobs:
   # 🔍 Code Quality Analysis
   sonarcloud-analysis:
@@ -49,13 +55,17 @@ jobs:
   security-analysis:
     name: 🔒 Security Analysis
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     
     steps:
     - name: 📥 Checkout code
       uses: actions/checkout@v4
     
     - name: 🔒 CodeQL Analysis
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
       with:
         languages: javascript
     
@@ -66,7 +76,9 @@ jobs:
         npm run build
     
     - name: 🔒 Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:javascript"
     
     # Snyk Security Scan temporarily disabled - requires SNYK_TOKEN secret setup
     # - name: 🛡️ Snyk Security Scan
@@ -77,7 +89,7 @@ jobs:
     #     args: --severity-threshold=high
     
     # - name: 📊 Upload security results
-    #   uses: github/codeql-action/upload-sarif@v2
+    #   uses: github/codeql-action/upload-sarif@v3
     #   if: always()
     #   with:
     #     sarif_file: snyk.sarif

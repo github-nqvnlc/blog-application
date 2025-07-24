@@ -37,7 +37,16 @@ If you want to use additional features, add these secrets in **Settings > Secret
 | `GH_TOKEN`         | Personal access token    | ❌ Optional        |
 | `OPENAI_API_KEY`   | AI features              | ❌ Optional        |
 
-### Step 4: Test the Fix
+### Step 4: Enable Code Scanning (for CodeQL)
+
+For security analysis to work:
+
+1. Go to **"Settings"** → **"Code security and analysis"**
+2. Enable **"Code scanning"**
+3. Click **"Set up"** → **"Advanced"**
+4. This allows CodeQL to upload security findings
+
+### Step 5: Test the Fix
 
 After updating permissions:
 
