@@ -5,7 +5,7 @@ import './App.css';
 import ArticleDetailPage from './pages/articleDetail/ArticleDetailPage';
 import HomePage from './pages/home/HomePage';
 import RegisterPage from './pages/register/RegisterPage';
-import LoginPage from './pages/login/LoginPage';
+import LoginPageNew from './pages/login/LoginPageNew';
 import ProfilePage from './pages/profile/ProfilePage';
 import AdminLayout from './pages/admin/AdminLayout';
 import Admin from './pages/admin/screens/Admin';
@@ -25,7 +25,7 @@ function App() {
         <Route path='/blog' element={<BlogPage />} />
         <Route path='/blog/:slug' element={<ArticleDetailPage />} />
         <Route path='/register' element={<RegisterPage />} />
-        <Route path='/login' element={<LoginPage />} />
+        <Route path='/login' element={<LoginPageNew />} />
         <Route path='/profile' element={<ProfilePage />} />
         <Route path='/admin' element={<AdminLayout />}>
           <Route index element={<Admin />} />
