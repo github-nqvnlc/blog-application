@@ -5,6 +5,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
 import cors from 'cors';
+import getCorsConfig from './config/corsConfig.js';
 import {
   errorResponserHandler,
   invalidPathHandler,
@@ -21,17 +22,27 @@ const __dirname = dirname(__filename);
 
 dotenv.config();
 connectDB();
+
 const app = express();
+
+// Apply secure CORS configuration
+const corsConfig = getCorsConfig();
+app.use(cors(corsConfig));
+
 app.use(express.json());
-
-const corsOptions = {
-  exposedHeaders: '*',
-};
-
-app.use(cors(corsOptions));
 
 app.get('/', (req, res) => {
   res.send('Server is running...');
+});
+
+// Health check endpoint for CI/CD
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Server is healthy',
+    timestamp: new Date().toISOString(),
+    env: process.env.NODE_ENV || 'development',
+  });
 });
 
 app.use('/api/users', userRoutes);
