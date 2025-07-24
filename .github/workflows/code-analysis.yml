@@ -125,7 +125,7 @@ jobs:
         npx web-vitals-cli http://localhost:3000 --output json > web-vitals-report.json
     
     - name: 📤 Upload performance reports
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: performance-reports
         path: |
@@ -172,7 +172,7 @@ jobs:
         npx tsc --noEmit --listFiles > ../typescript-compilation.log 2>&1 || true
     
     - name: 📤 Upload code metrics
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: code-metrics-${{ github.sha }}
         path: |
@@ -220,7 +220,7 @@ jobs:
         cd ../server && npm ls --json > ../dependency-tree-server.json || true
     
     - name: 📤 Upload dependency reports
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: dependency-reports-${{ github.sha }}
         path: |
