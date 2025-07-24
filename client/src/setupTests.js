@@ -37,3 +37,66 @@ global.ResizeObserver = class ResizeObserver {
 
 // Mock scrollTo
 global.scrollTo = jest.fn();
+
+// Mock problematic ES modules
+jest.mock('lowlight', () => ({
+  lowlight: {
+    highlight: (language, code) => ({
+      value: code,
+      language: language,
+      children: [],
+    }),
+    highlightAuto: code => ({
+      value: code,
+      language: 'auto',
+      children: [],
+    }),
+    listLanguages: () => ['javascript', 'css', 'html', 'python'],
+  },
+}));
+
+// Mock axios
+jest.mock('axios', () => ({
+  __esModule: true,
+  default: {
+    get: jest.fn(() => Promise.resolve({ data: {} })),
+    post: jest.fn(() => Promise.resolve({ data: {} })),
+    put: jest.fn(() => Promise.resolve({ data: {} })),
+    delete: jest.fn(() => Promise.resolve({ data: {} })),
+    patch: jest.fn(() => Promise.resolve({ data: {} })),
+  },
+}));
+
+// Mock @tiptap/html
+jest.mock('@tiptap/html', () => ({
+  generateHTML: jest.fn(json => {
+    if (!json) return '<div>Empty content</div>';
+    if (typeof json === 'string') return json;
+    if (json && json.content) return '<div>Mocked HTML content</div>';
+    return '<div>Default content</div>';
+  }),
+}));
+
+// Mock html-react-parser
+jest.mock('html-react-parser', () => ({
+  __esModule: true,
+  default: jest.fn(html => {
+    if (!html) return '<div>Empty parsed content</div>';
+    if (typeof html === 'string') return `<div>Parsed: ${html}</div>`;
+    return '<div>Parsed content</div>';
+  }),
+}));
+
+// Mock tiptapExtensions
+jest.mock('./constants/tiptapExtensions', () => ({
+  extensions: [],
+}));
+
+// Mock @uidotdev/usehooks
+jest.mock('@uidotdev/usehooks', () => ({
+  useWindowSize: jest.fn(() => ({ width: 1024, height: 768 })),
+  useLocalStorage: jest.fn(() => [null, jest.fn()]),
+  useSessionStorage: jest.fn(() => [null, jest.fn()]),
+  usePrevious: jest.fn(() => undefined),
+  useToggle: jest.fn(() => [false, jest.fn()]),
+}));

@@ -1,4 +1,18 @@
-import { parseJsonToHtml } from './parseJsonToHtml';
+import parseJsonToHtml from './parseJsonToHtml';
+
+// Mock the dependencies before importing
+jest.mock('@tiptap/html', () => ({
+  generateHTML: jest.fn(() => '<div>Generated HTML</div>'),
+}));
+
+jest.mock('html-react-parser', () => ({
+  __esModule: true,
+  default: jest.fn(html => `Parsed: ${html}`),
+}));
+
+jest.mock('../constants/tiptapExtensions', () => ({
+  extensions: [],
+}));
 
 describe('parseJsonToHtml Utility', () => {
   test('should handle empty input', () => {
@@ -10,6 +24,7 @@ describe('parseJsonToHtml Utility', () => {
   test('should handle string input', () => {
     const result = parseJsonToHtml('Simple text');
     expect(result).toBeDefined();
+    expect(typeof result).toBe('string');
   });
 
   test('should handle object input', () => {
@@ -48,5 +63,6 @@ describe('parseJsonToHtml Utility', () => {
 
     const result = parseJsonToHtml(testArray);
     expect(result).toBeDefined();
+    expect(typeof result).toBe('string');
   });
 });

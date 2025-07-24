@@ -71,10 +71,15 @@
     "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^3.2.4"
   },
+  "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!(axios|lowlight|@tiptap|@tanstack|highlight\\.js|@uidotdev)/)"
+    ]
+  },
   "overrides": {
     "nth-check": "^2.1.1",
     "postcss": "^8.4.31",
-    "webpack-dev-server": "^5.2.1",
+    "webpack-dev-server": "^4.15.1",
     "svgo": "^3.0.0"
   }
 }

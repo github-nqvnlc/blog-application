@@ -1,5 +1,6 @@
-import request from 'supertest';
-import express from 'express';
+/* eslint-disable */
+const request = require('supertest');
+const express = require('express');
 
 // Mock database connection
 jest.mock('../../config/db.js', () => ({
