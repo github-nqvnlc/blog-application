@@ -800,3 +800,25 @@ A: Currently web-only, but mobile app is in the roadmap.
 *Built with ❤️ by Van Loc using modern web technologies*
 
 </div> 
+<!-- GITHUB_STATS:START -->
+## 📊 GitHub Statistics
+
+### 🔥 GitHub Stats
+![GitHub Stats](https://github-readme-stats.vercel.app/api?username=github-nqvnlc&show_icons=true&theme=radical&hide_border=true&bg_color=0D1117)
+
+### 💻 Most Used Languages
+![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=github-nqvnlc&layout=compact&theme=radical&hide_border=true&bg_color=0D1117)
+
+### 🔥 GitHub Streak
+![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=github-nqvnlc&theme=radical&hide_border=true&background=0D1117)
+
+### 📈 Activity Graph
+![GitHub Activity Graph](https://activity-graph.herokuapp.com/graph?username=github-nqvnlc&theme=react-dark&hide_border=true&bg_color=0D1117)
+
+### 🏆 GitHub Trophies
+![GitHub Trophies](https://github-profile-trophy.vercel.app/?username=github-nqvnlc&theme=radical&no-frame=true&no-bg=true&margin-w=4)
+
+### 📊 Profile Views
+![Profile Views](https://komarev.com/ghpvc/?username=github-nqvnlc&color=brightgreen&style=flat-square&label=Profile+Views)
+
+<!-- GITHUB_STATS:END -->
