@@ -9,6 +9,11 @@ on:
     branches: [ main ]
     paths: [ '.github/workflows/readme-automation.yml' ]
 
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
 jobs:
   # 📊 Update GitHub Stats
   update-github-stats:
@@ -18,6 +23,9 @@ jobs:
     steps:
     - name: 📥 Checkout repository
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
     
     - name: 📊 Generate GitHub stats
       uses: anmol098/waka-readme-stats@master
@@ -92,12 +100,12 @@ jobs:
         fi
     
     - name: 💾 Commit changes
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add README.md
-        git diff --staged --quiet || git commit -m "📊 Updated GitHub stats in README"
-        git push
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "📊 Updated GitHub stats in README"
+        file_pattern: README.md
+        commit_user_name: github-actions[bot]
+        commit_user_email: github-actions[bot]@users.noreply.github.com
 
   # 🎯 Update Project Metrics
   update-project-metrics:
@@ -107,6 +115,9 @@ jobs:
     steps:
     - name: 📥 Checkout repository
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
     
     - name: 🔧 Setup Node.js
       uses: actions/setup-node@v4
@@ -172,12 +183,12 @@ jobs:
         fi
     
     - name: 💾 Commit metrics update
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add README.md
-        git diff --staged --quiet || git commit -m "📈 Updated project metrics in README"
-        git push
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "📈 Updated project metrics in README"
+        file_pattern: README.md
+        commit_user_name: github-actions[bot]
+        commit_user_email: github-actions[bot]@users.noreply.github.com
 
   # 🌟 Update Contributors Section
   update-contributors:
@@ -187,6 +198,9 @@ jobs:
     steps:
     - name: 📥 Checkout repository
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
     
     - name: 🌟 Update contributors
       uses: akhilmhdh/contributors-readme-action@v2.3.6
