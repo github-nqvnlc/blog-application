@@ -121,7 +121,7 @@ start_all() {
 
 # Build functions
 build_client() {
-    print_status "Building client..."
+    print_status "Building client with increased memory limit..."
     check_directory "client"
     cd client
     npm run build
