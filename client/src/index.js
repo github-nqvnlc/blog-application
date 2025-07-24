@@ -8,9 +8,10 @@ import { Provider } from 'react-redux';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 import store from './store';
-// import { stables } from "./constants";
+import { stables } from './constants';
 
-axios.defaults.baseURL = 'http://localhost:8081';
+axios.defaults.baseURL = stables.API_BASE_URL;
+axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 const queryClient = new QueryClient({
   defaultOptions: {
