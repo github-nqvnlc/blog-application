@@ -21,6 +21,7 @@ const getAllowedOrigins = () => {
       'http://127.0.0.1:3001', // Alternative localhost
       'http://localhost:5000', // Alternative port
       'http://localhost:8080', // Alternative port
+      null, // Allow requests with no origin (Swagger UI)
     ];
   }
 
