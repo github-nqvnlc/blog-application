@@ -173,20 +173,20 @@ echo [INFO] Or use: npm run start:client ^& npm run start:server
 goto :end
 
 :build_client
-echo [INFO] Building client...
+echo [INFO] Building client with increased memory limit...
 if not exist "client" (
     echo [ERROR] Directory 'client' does not exist!
     exit /b 1
 )
 cd client
 call npm run build
-if errorlevel 1 (
+if %errorlevel% neq 0 (
     echo [ERROR] Failed to build client!
     exit /b 1
 )
-cd ..
 echo [SUCCESS] Client built successfully!
-goto :end
+cd ..
+goto :eof
 
 :build_server
 echo [INFO] Building server...
