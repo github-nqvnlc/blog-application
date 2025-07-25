@@ -1,75 +1,40 @@
 import React, { useState } from 'react';
-import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
-import { MdKeyboardArrowDown } from 'react-icons/md';
+import {
+  Home,
+  BookOpen,
+  DollarSign,
+  HelpCircle,
+  ChevronDown,
+  User,
+  Settings,
+  LogOut,
+  Menu,
+  X,
+} from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { images } from '../constants';
 import { logout } from '../store/actions/user';
+import ThemeToggle from './ThemeToggle';
 
 const navItemsInfo = [
-  { name: 'Home', type: 'link', href: '/' },
-  { name: 'Blog', type: 'link', href: '/blog' },
-  {
-    name: 'Pages',
-    type: 'dropdown',
-    items: [
-      { title: 'About us', href: '/about' },
-      { title: 'Contact us', href: '/contact' },
-    ],
-  },
-  { name: 'Pricing', type: 'link', href: '/pricing' },
-  { name: 'Faq', type: 'link', href: '/faq' },
+  { name: 'Home', type: 'link', href: '/', icon: Home },
+  { name: 'Blog', type: 'link', href: '/blog', icon: BookOpen },
+  { name: 'Pricing', type: 'link', href: '/pricing', icon: DollarSign },
+  { name: 'Faq', type: 'link', href: '/faq', icon: HelpCircle },
 ];
 
 const NavItem = ({ item }) => {
-  const [dropdown, setDropdown] = useState(false);
-
-  const toggleDropdownHandler = () => {
-    setDropdown(curState => {
-      return !curState;
-    });
-  };
+  const IconComponent = item.icon;
 
   return (
-    <li className='group relative'>
-      {item.type === 'link' ? (
-        <>
-          <Link to={item.href} className='px-4 py-2'>
-            {item.name}
-          </Link>
-          <span className='absolute right-0 top-0 cursor-pointer font-bold text-blue-500 opacity-0 transition-all duration-500 group-hover:right-[90%] group-hover:opacity-100'>
-            /
-          </span>
-        </>
-      ) : (
-        <div className='flex flex-col items-center'>
-          <button
-            className='flex items-center gap-x-1 px-4 py-2'
-            onClick={toggleDropdownHandler}
-          >
-            <span>{item.name}</span>
-            <MdKeyboardArrowDown />
-          </button>
-          <div
-            className={`${
-              dropdown ? 'block' : 'hidden'
-            } w-max pt-4 transition-all duration-500 lg:absolute lg:bottom-0 lg:right-0 lg:hidden lg:translate-y-full lg:transform lg:group-hover:block`}
-          >
-            <ul className='flex flex-col overflow-hidden rounded-lg bg-dark-soft text-center shadow-lg lg:bg-transparent'>
-              {item.items.map((page, index) => (
-                <Link
-                  key={index}
-                  to={page.href}
-                  className='px-4 py-2 text-white hover:bg-dark-hard hover:text-white lg:text-dark-soft'
-                >
-                  {page.title}
-                </Link>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
+    <li>
+      <div className='d-tooltip d-tooltip-bottom' data-tip={item.name}>
+        <Link to={item.href} className='d-btn d-btn-ghost d-btn-circle'>
+          <IconComponent size={20} />
+        </Link>
+      </div>
     </li>
   );
 };
@@ -92,88 +57,101 @@ const Header = () => {
   };
 
   return (
-    <section className='sticky left-0 right-0 top-0 z-50 bg-white'>
-      <header className='container mx-auto flex items-center justify-between px-5 py-4'>
-        <Link to='/'>
-          <img className='w-28' src={images.Logo} alt='logo' />
-        </Link>
-        <div className='z-50 lg:hidden'>
-          {navIsVisible ? (
-            <AiOutlineClose
-              className='h-6 w-6'
-              onClick={navVisibilityHandler}
-            />
-          ) : (
-            <AiOutlineMenu className='h-6 w-6' onClick={navVisibilityHandler} />
-          )}
-        </div>
-        <div
-          className={`${
-            navIsVisible ? 'right-0' : '-right-full'
-          } fixed bottom-0 top-0 z-[49] mt-[56px] flex w-full flex-col items-center justify-center gap-x-9 bg-dark-hard transition-all duration-300 lg:static lg:mt-0 lg:w-auto lg:flex-row lg:justify-end lg:bg-transparent`}
-        >
-          <ul className='flex flex-col items-center gap-x-2 gap-y-5 font-semibold text-white lg:flex-row lg:text-dark-soft'>
+    <div className='d-navbar d-bg-base-100 d-shadow-lg sticky top-0 z-50'>
+      <div className='d-navbar-start'>
+        <div className='d-dropdown'>
+          <div
+            tabIndex={0}
+            role='button'
+            className='d-btn d-btn-ghost lg:hidden'
+            onClick={navVisibilityHandler}
+          >
+            {navIsVisible ? <X size={24} /> : <Menu size={24} />}
+          </div>
+          <ul
+            tabIndex={0}
+            className={`d-menu d-menu-sm d-dropdown-content d-bg-base-100 d-rounded-box z-[1] mt-3 w-52 p-2 shadow ${navIsVisible ? 'block' : 'hidden'}`}
+          >
             {navItemsInfo.map(item => (
               <NavItem key={item.name} item={item} />
             ))}
           </ul>
-          {userState.userInfo ? (
-            <div className='flex flex-col items-center gap-x-2 gap-y-5 font-semibold text-white lg:flex-row lg:text-dark-soft'>
-              <div className='group relative'>
-                <div className='flex flex-col items-center'>
-                  <button
-                    className='mt-5 flex items-center gap-x-1 rounded-full border-2 border-blue-500 px-6 py-2 font-semibold text-blue-500 transition-all duration-300 hover:bg-blue-500 hover:text-white lg:mt-0'
-                    onClick={() => setProfileDrowpdown(!profileDrowpdown)}
-                  >
-                    <span>Account</span>
-                    <MdKeyboardArrowDown />
-                  </button>
-                  <div
-                    className={`${
-                      profileDrowpdown ? 'block' : 'hidden'
-                    } w-max pt-4 transition-all duration-500 lg:absolute lg:bottom-0 lg:right-0 lg:hidden lg:translate-y-full lg:transform lg:group-hover:block`}
-                  >
-                    <ul className='flex flex-col overflow-hidden rounded-lg bg-dark-soft text-center shadow-lg lg:bg-transparent'>
-                      {userState?.userInfo?.admin && (
-                        <button
-                          onClick={() => navigate('/admin')}
-                          type='button'
-                          className='px-4 py-2 text-white hover:bg-dark-hard hover:text-white lg:text-dark-soft'
-                        >
-                          Admin Dashboard
-                        </button>
-                      )}
-
-                      <button
-                        onClick={() => navigate('/profile')}
-                        type='button'
-                        className='px-4 py-2 text-white hover:bg-dark-hard hover:text-white lg:text-dark-soft'
-                      >
-                        Profile Page
-                      </button>
-                      <button
-                        onClick={logoutHandler}
-                        type='button'
-                        className='px-4 py-2 text-white hover:bg-dark-hard hover:text-white lg:text-dark-soft'
-                      >
-                        Logout
-                      </button>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <button
-              onClick={() => navigate('/login')}
-              className='mt-5 rounded-full border-2 border-blue-500 px-6 py-2 font-semibold text-blue-500 transition-all duration-300 hover:bg-blue-500 hover:text-white lg:mt-0'
-            >
-              Sign in
-            </button>
-          )}
         </div>
-      </header>
-    </section>
+        <Link to='/' className='d-btn d-btn-ghost text-xl'>
+          <img className='w-28' src={images.Logo} alt='logo' />
+        </Link>
+      </div>
+
+      <div className='d-navbar-center hidden lg:flex'>
+        <ul className='d-menu d-menu-horizontal px-1'>
+          {navItemsInfo.map(item => (
+            <NavItem key={item.name} item={item} />
+          ))}
+        </ul>
+      </div>
+
+      <div className='d-navbar-end gap-2'>
+        {/* Theme Toggle */}
+        <ThemeToggle />
+
+        {userState.userInfo ? (
+          <div className='d-dropdown d-dropdown-end'>
+            <div
+              tabIndex={0}
+              role='button'
+              className='d-btn d-btn-primary d-btn-outline'
+              onClick={() => setProfileDrowpdown(!profileDrowpdown)}
+            >
+              <User size={18} />
+              <span className='hidden sm:inline'>Account</span>
+              <ChevronDown size={16} />
+            </div>
+            <ul
+              tabIndex={0}
+              className='d-menu d-dropdown-content d-bg-base-100 d-rounded-box z-[1] mt-4 w-52 p-2 shadow'
+            >
+              {userState?.userInfo?.admin && (
+                <li>
+                  <button
+                    onClick={() => navigate('/admin')}
+                    type='button'
+                    className='flex items-center gap-2'
+                  >
+                    <Settings size={16} />
+                    Admin Dashboard
+                  </button>
+                </li>
+              )}
+              <li>
+                <button
+                  onClick={() => navigate('/profile')}
+                  type='button'
+                  className='flex items-center gap-2'
+                >
+                  <User size={16} />
+                  Profile Page
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={logoutHandler}
+                  type='button'
+                  className='flex items-center gap-2'
+                >
+                  <LogOut size={16} />
+                  Logout
+                </button>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <Link to='/login' className='d-btn d-btn-primary'>
+            <User size={18} />
+            <span className='hidden sm:inline'>Sign in</span>
+          </Link>
+        )}
+      </div>
+    </div>
   );
 };
 

@@ -16,6 +16,7 @@ import Categories from './pages/admin/screens/categories/Categories';
 import EditCategories from './pages/admin/screens/categories/EditCategories';
 import Users from './pages/admin/screens/users/Users';
 import BlogPage from './pages/blog/BlogPage';
+import ThemeTestPage from './pages/ThemeTestPage';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path='/register' element={<RegisterPage />} />
         <Route path='/login' element={<LoginPageNew />} />
         <Route path='/profile' element={<ProfilePage />} />
+        <Route path='/theme-test' element={<ThemeTestPage />} />
         <Route path='/admin' element={<AdminLayout />}>
           <Route index element={<Admin />} />
           <Route path='comments' element={<Comments />} />
