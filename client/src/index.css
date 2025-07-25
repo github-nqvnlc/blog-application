@@ -3,28 +3,28 @@
 @tailwind utilities;
 
 /* Sunset Theme Definition */
-[data-theme="sunset"] {
+[data-theme='sunset'] {
   color-scheme: dark;
-  --p: 40 78% 59%;                    /* Primary - Orange warm */
-  --pc: 40 31% 15%;                   /* Primary content */
-  --s: 3 77% 73%;                     /* Secondary - Pink/Red */
-  --sc: 3 35% 15%;                    /* Secondary content */
-  --a: 300 67% 71%;                   /* Accent - Purple/Magenta */
-  --ac: 300 33% 14%;                  /* Accent content */
-  --n: 238 19% 26%;                   /* Neutral - Dark blue-gray */
-  --nc: 238 19% 70%;                  /* Neutral content */
-  --b1: 238 19% 22%;                  /* Base 100 - Main background */
-  --b2: 238 19% 20%;                  /* Base 200 */
-  --b3: 238 19% 18%;                  /* Base 300 */
-  --bc: 245 43% 77%;                  /* Base content */
-  --in: 206 85% 86%;                  /* Info */
-  --inc: 206 17% 17%;                 /* Info content */
-  --su: 145 85% 86%;                  /* Success */
-  --suc: 145 17% 17%;                 /* Success content */
-  --wa: 74 84% 86%;                   /* Warning */
-  --wac: 74 16% 17%;                  /* Warning content */
-  --er: 17 78% 85%;                   /* Error */
-  --erc: 17 15% 17%;                  /* Error content */
+  --p: 40 78% 59%; /* Primary - Orange warm */
+  --pc: 40 31% 15%; /* Primary content */
+  --s: 3 77% 73%; /* Secondary - Pink/Red */
+  --sc: 3 35% 15%; /* Secondary content */
+  --a: 300 67% 71%; /* Accent - Purple/Magenta */
+  --ac: 300 33% 14%; /* Accent content */
+  --n: 238 19% 26%; /* Neutral - Dark blue-gray */
+  --nc: 238 19% 70%; /* Neutral content */
+  --b1: 238 19% 22%; /* Base 100 - Main background */
+  --b2: 238 19% 20%; /* Base 200 */
+  --b3: 238 19% 18%; /* Base 300 */
+  --bc: 245 43% 77%; /* Base content */
+  --in: 206 85% 86%; /* Info */
+  --inc: 206 17% 17%; /* Info content */
+  --su: 145 85% 86%; /* Success */
+  --suc: 145 17% 17%; /* Success content */
+  --wa: 74 84% 86%; /* Warning */
+  --wac: 74 16% 17%; /* Warning content */
+  --er: 17 78% 85%; /* Error */
+  --erc: 17 15% 17%; /* Error content */
   --rounded-box: 1rem;
   --rounded-btn: 0.5rem;
   --rounded-badge: 1.9rem;
@@ -39,12 +39,15 @@
 @layer base {
   /* Smooth theme transitions */
   * {
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease,
+      border-color 0.3s ease;
   }
 
   /* Override for specific animations that shouldn't be affected */
-  *[class*="duration-"],
-  *[class*="transition-"],
+  *[class*='duration-'],
+  *[class*='transition-'],
   .no-theme-transition {
     transition: revert;
   }
